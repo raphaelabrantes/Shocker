@@ -1,8 +1,12 @@
 #ifndef DUALSHOCKER_CONTROLLER_H
 #define DUALSHOCKER_CONTROLLER_H
+#include <thread>
+#include <mutex>
+#include <iostream>
+#include <fstream>
 #define BYTE 8
-#define BYTE_L2 9
-#define BYTE_R2 8
+#define BYTE_L2 8
+#define BYTE_R2 9
 #define BYTE_SPECIALS 6
 #define BYTE_BUTTONS 5
 #define BYTE_RIGHT_Y 4
@@ -21,21 +25,24 @@
 #define BIT_L2 2
 #define BIT_R1 1
 #define BIT_L1 0
+using namespace std;
 
 class Controller {
 public:
-    /*Controller();
-    ~Controller();*/
-    void check_buttons();
+    Controller();
+    ~Controller();
     void continue_reading();
-    void check_sticks();
+    void update_inputs();
+    void output();
 
 private:
     char bytes [64], bits[8], left_stick_x, left_stick_y, right_stick_x, right_stick_y;
     char absolute(char b);
-    bool square, triangule, ball, x, l1, l2, r1, r2, opt, is_r3_right, is_r3_up, is_l3_right, is_l3_up;
+    thread file_reader;
+    mutex block;
+    bool square, triangule, circule, x, l1, l2, r1, r2, opt, is_r3_right, is_r3_up, is_l3_right, is_l3_up;
     unsigned char left_buttons,  l2_trigger, r2_trigger;
-
+    bool get_bit(char byte, int place);
 };
 
 
