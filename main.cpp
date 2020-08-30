@@ -2,7 +2,7 @@
 
 
 int main () {
-    Controller com{};
-    com.continue_reading();
+    Controller com;
+    for(;;){    }
     return 0;
 }
