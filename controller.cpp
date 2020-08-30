@@ -2,35 +2,50 @@
 // Created by godofall on 23/08/2020.
 //
 #include "controller.h"
-#include <iostream>
-#include <fstream>
 
-using namespace std;
 
-/*Controller::Controller() {}
-Controller::~Controller() {} */
+Controller::Controller() {
+    file_reader = thread(&Controller::continue_reading, this);
+    file_reader.detach();
+    while(true){
+        block.lock();
+        output();
+        block.unlock();
+    }
+ }
+
+ Controller::~Controller() {
+
+}
 void Controller::continue_reading() {
     ifstream file ("/dev/hidraw3", ios::in|ios::binary);
     while(file.is_open())
     {
         file.seekg (0, ios::beg);
         file.read (bytes, sizeof(bytes) - 1);
-        check_sticks();
+        block.lock();
+        update_inputs();
+        block.unlock();
     }
     file.close();
 }
 
-void Controller::check_buttons(){
-    char place_holder = bytes[5];
-    for (int i = 0; i < 8; i++) {
-        bits[i] = (place_holder & (1 << i)) != 0;
-    }
-    for (char bit : bits) {
-        cout << (int) bit;
+void Controller::output(){
+   if(square) cout << "square " << endl;
+   if(triangule) cout << "triangule " << endl;
+   if (circule) cout << "circule " << endl;
+   if(x) cout << "x " << endl;
+   if(l1) cout << "L1 " << endl ;
+   if(l2) cout << "L2 " << (int) l2_trigger << endl;
+   if(r1) cout << "R1 " << endl;
+   if(r2) cout << "R2 "  << (int) r2_trigger << endl;
+   if(opt) cout << "OPT" << endl;
+   if(left_buttons  < 7 ) cout << " SETA (0 = ↑) (1 = ↑→) (2 = → ) (3 = ↓→) (4 = ↓) ( 5 = ↓←) (6 = ←) (7 = ↑←)"<< (int) left_buttons << endl;
+   if((left_stick_y  > 10) || (left_stick_x > 10)) cout << " L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
+   if((right_stick_y  > 10) || (right_stick_x > 10)) cout << " R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
 
-    }
-    cout << endl;
 }
+
 char Controller::absolute(char b){
     b -= 127;
     b = abs(b);
@@ -38,7 +53,11 @@ char Controller::absolute(char b){
     return b;
 }
 
-void Controller::check_sticks() {
+bool Controller::get_bit(char byte, int number){
+    return (byte & (1 << number)) != 0;
+}
+
+void Controller::update_inputs() {
     is_r3_right = bytes[BYTE_RIGHT_X] & 128;
     is_r3_up = !(bytes[BYTE_RIGHT_Y] & 128);
     is_l3_right = bytes[BYTE_LEFT_X] & 128;
@@ -47,9 +66,16 @@ void Controller::check_sticks() {
     right_stick_y = absolute(bytes[BYTE_RIGHT_Y]);
     left_stick_x = absolute(bytes[BYTE_LEFT_X]);
     left_stick_y = absolute(bytes[BYTE_LEFT_Y]);
-    cout << "L3 X:" <<  (int) left_stick_x << "\tL3 Y:" << (int) left_stick_y;
-    cout << "\tL3UP:"<<  is_l3_up << "\tRIGHTRL3:" << is_l3_right;
-    cout << "\tR3 X: " << (int) right_stick_x << "\t R3 Y:" << (int) right_stick_y;
-    cout << "\tR3UP:" <<  is_r3_up << "\t RIGHTR3:" << is_r3_right;
-    cout << endl;
+    square = get_bit(bytes[BYTE_BUTTONS], BIT_SQR);
+    triangule = get_bit(bytes[BYTE_BUTTONS], BIT_TRI);
+    circule = get_bit(bytes[BYTE_BUTTONS], BIT_CIR);
+    x = get_bit(bytes[BYTE_BUTTONS], BIT_X);
+    l1 = get_bit(bytes[BYTE_SPECIALS], BIT_L1);
+    l2 = get_bit(bytes[BYTE_SPECIALS], BIT_L2);
+    r1 = get_bit(bytes[BYTE_SPECIALS], BIT_R1);
+    r2 = get_bit(bytes[BYTE_SPECIALS], BIT_R2);
+    opt = get_bit(bytes[BYTE_SPECIALS], BIT_OPT);
+    l2_trigger = bytes[BYTE_L2];
+    r2_trigger = bytes[BYTE_R2];
+    left_buttons = bytes[BYTE_BUTTONS] & 15;
 }
