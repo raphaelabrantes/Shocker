@@ -4,7 +4,7 @@
 #include <mutex>
 #include <iostream>
 #include <fstream>
-#define BYTE 8
+#include <chrono>
 #define BYTE_L2 8
 #define BYTE_R2 9
 #define BYTE_SPECIALS 6
@@ -33,14 +33,15 @@ public:
     ~Controller();
     void continue_reading();
     void update_inputs();
+    void initialization();
     void output();
 
 private:
-    char bytes [64], bits[8], left_stick_x, left_stick_y, right_stick_x, right_stick_y;
+    char bytes [64] = {0}, bits[8], left_stick_x, left_stick_y, right_stick_x, right_stick_y;
     char absolute(char b);
     thread file_reader;
     mutex block;
-    bool square, triangule, circule, x, l1, l2, r1, r2, opt, is_r3_right, is_r3_up, is_l3_right, is_l3_up;
+    bool square, triangule, circule, x, l1, l2, r1, r2, opt, share ,is_r3_right, is_r3_up, is_l3_right, is_l3_up, l3, r3;
     unsigned char left_buttons,  l2_trigger, r2_trigger;
     bool get_bit(char byte, int place);
 };

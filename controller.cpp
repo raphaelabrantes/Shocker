@@ -5,17 +5,46 @@
 
 
 Controller::Controller() {
+    initialization();
     file_reader = thread(&Controller::continue_reading, this);
     file_reader.detach();
     while(true){
         block.lock();
         output();
         block.unlock();
+        this_thread::sleep_for(chrono::milliseconds(4));
+
     }
  }
 
  Controller::~Controller() {
 
+}
+
+void Controller::initialization(){
+    left_stick_y = 0;
+    left_stick_x = 0;
+    right_stick_x = 0;
+    right_stick_y = 0;
+    left_buttons = 8;
+    l2_trigger = 0;
+    r2_trigger = 0;
+    square = false;
+    triangule = false;
+    circule = false;
+    x = false;
+    l1 = false;
+    l2 = false;
+    l3 = false;
+    r1 = false;
+    r2 = false;
+    r3 = false;
+    opt = false;
+    share = false;
+    is_l3_right = false;
+    is_r3_right = false;
+    is_l3_up = false;
+    is_r3_up = false;
 }
 void Controller::continue_reading() {
     ifstream file ("/dev/hidraw3", ios::in|ios::binary);
@@ -26,8 +55,11 @@ void Controller::continue_reading() {
         block.lock();
         update_inputs();
         block.unlock();
+
     }
+    cout << "DualShock not connected";
     file.close();
+    terminate();
 }
 
 void Controller::output(){
@@ -40,10 +72,12 @@ void Controller::output(){
    if(r1) cout << "R1 " << endl;
    if(r2) cout << "R2 "  << (int) r2_trigger << endl;
    if(opt) cout << "OPT" << endl;
-   if(left_buttons  < 7 ) cout << " SETA (0 = ↑) (1 = ↑→) (2 = → ) (3 = ↓→) (4 = ↓) ( 5 = ↓←) (6 = ←) (7 = ↑←)"<< (int) left_buttons << endl;
-   if((left_stick_y  > 10) || (left_stick_x > 10)) cout << " L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
-   if((right_stick_y  > 10) || (right_stick_x > 10)) cout << " R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
-
+   if(left_buttons  <= 7 ) cout << " SETA (0 = ↑) (1 = ↑→) (2 = → ) (3 = ↓→) (4 = ↓) ( 5 = ↓←) (6 = ←) (7 = ↑←)"<< (int) left_buttons << endl;
+   if((left_stick_y  > 10) || (left_stick_x > 10)) cout << "L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
+   if((right_stick_y  > 10) || (right_stick_x > 10)) cout << "R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
+   if(share) cout << "SHARED " << endl;
+   if(l3) cout << "L3 " << endl;
+   if(r3) cout << "R3 " << endl;
 }
 
 char Controller::absolute(char b){
@@ -75,6 +109,9 @@ void Controller::update_inputs() {
     r1 = get_bit(bytes[BYTE_SPECIALS], BIT_R1);
     r2 = get_bit(bytes[BYTE_SPECIALS], BIT_R2);
     opt = get_bit(bytes[BYTE_SPECIALS], BIT_OPT);
+    share = get_bit(bytes[BYTE_SPECIALS], BIT_SHARE);
+    r3 = get_bit(bytes[BYTE_SPECIALS], BIT_R3);
+    l3 = get_bit(bytes[BYTE_SPECIALS], BIT_L3);
     l2_trigger = bytes[BYTE_L2];
     r2_trigger = bytes[BYTE_R2];
     left_buttons = bytes[BYTE_BUTTONS] & 15;
