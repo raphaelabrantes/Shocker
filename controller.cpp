@@ -114,7 +114,7 @@ queue<void *> Controller::get_events(){
        cout << "L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
    }
    if((right_stick_y  > 10) || (right_stick_x > 10)) {
-       auto *e = new Stick_Event(R3_L, right_stick_x, left_stick_y, is_r3_up, is_r3_right);
+       auto *e = new Stick_Event(R3_M, right_stick_x, left_stick_y, is_r3_up, is_r3_right);
        event_queue.push(e);
        cout << "R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
    }

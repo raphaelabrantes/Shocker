@@ -8,11 +8,22 @@ int main () {
         events = com.get_events();
         while(!events.empty()){
             Event e = *(Event *) events.front();
-            if(e.get_id() > 16 || e.get_id() < 0){
-                Trigger_Event e = *(Trigger_Event *) events.front();
+            int id = e.get_id();
+            if(id < 10){
+                cout << "<Event> ";
             }
-            cout << e.get_id();
-             events.pop();
+            else if( 10 <= id && id <= 12){
+                cout << "<Trigger Event> ";
+                Trigger_Event te = *(Trigger_Event *) events.front();
+                cout << "Value: " << (int) te.get_value();
+            }
+            else {
+                cout << "<Stick Event> ";
+                Stick_Event se = *(Stick_Event *) events.front();
+                cout << "Y: " << (int)se.get_y() << " X: " << (int) se.get_x() << " Right: " << (int) se.is_right() << " Up: "
+                     << (int) se.is_up();
+            }
+            events.pop();
         }
     }
     return 0;
