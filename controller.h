@@ -36,6 +36,8 @@ public:
     queue<void *> get_events();
 
 private:
+    queue <void *> event_queue;
+    void set_events();
     void continue_reading();
     void initialization();
     void update_inputs();

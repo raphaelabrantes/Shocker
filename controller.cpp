@@ -46,6 +46,7 @@ void Controller::continue_reading() {
         file.read (bytes, sizeof(bytes) - 1);
         block.lock();
         update_inputs();
+        set_events();
         block.unlock();
 
     }
@@ -54,11 +55,9 @@ void Controller::continue_reading() {
     terminate();
 }
 
-queue<void *> Controller::get_events(){
-    queue <void *> event_queue;
-    block.lock();
+
+void Controller::set_events(){
    if(square){
-       cout << "square " << endl;
        auto *e = new Event(SQUARE);
        event_queue.push(e);
    }
@@ -66,75 +65,66 @@ queue<void *> Controller::get_events(){
    if(triangule) {
        auto *e = new Event(TRIANGLE);
        event_queue.push(e);
-       cout << "triangule " << endl;
    }
    if (circle) {
        auto *e = new Event(CIRCLE);
        event_queue.push(e);
-       cout << "circle " << endl;
    }
    if(x){
        auto *e = new Event(X);
        event_queue.push(e);
-       cout << "X " << endl;
    }
    if(l1) {
        auto *e = new Event(L1);
        event_queue.push(e);
-       cout << "L1 " << endl ;
    }
    if(l2) {
        auto *e = new Trigger_Event(L2, l2_trigger);
        event_queue.push(e);
-       cout << "L2 " << (int) l2_trigger << endl;
    }
    if(r1){
        auto *e = new Event(R1);
        event_queue.push(e);
-       cout << "R1 " << endl;
    }
    if(r2) {
        auto *e = new Trigger_Event(R2, r2_trigger);
        event_queue.push(e);
-       cout << "R2 "  << (int) r2_trigger << endl;
    }
    if(opt) {
        auto *e = new Event(OPT);
        event_queue.push(e);
-       cout << "OPT" << endl;
    }
    if(left_buttons  <= 7 ){
        auto *e = new Trigger_Event(LEFT_B, left_buttons);
        event_queue.push(e);
-       cout << " SETA "<< (int) left_buttons << endl;
    }
    if((left_stick_y  > 10) || (left_stick_x > 10)) {
        auto *e = new Stick_Event(L3_M, left_stick_x, left_stick_y, is_l3_up, is_l3_right);
        event_queue.push(e);
-       cout << "L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
    }
    if((right_stick_y  > 10) || (right_stick_x > 10)) {
        auto *e = new Stick_Event(R3_M, right_stick_x, left_stick_y, is_r3_up, is_r3_right);
        event_queue.push(e);
-       cout << "R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
    }
    if(share) {
        auto *e = new Event(SHARE);
        event_queue.push(e);
-       cout << "SHARED " << endl;
    }
    if(l3) {
        auto *e = new Event(L3);
        event_queue.push(e);
-       cout << "L3 " << endl;
    }
    if(r3) {
        auto *e = new Event(R3);
        event_queue.push(e);
-       cout << "R3 " << endl;
    }
-   block.unlock();
-   return event_queue;
+}
+queue<void *> Controller::get_events() {
+    block.lock();
+    queue<void *> temp;
+    swap(temp, event_queue);
+    block.unlock();
+    return temp;
 }
 
 char Controller::absolute(char b){
