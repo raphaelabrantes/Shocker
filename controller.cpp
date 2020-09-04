@@ -8,18 +8,9 @@ Controller::Controller() {
     initialization();
     file_reader = thread(&Controller::continue_reading, this);
     file_reader.detach();
-    while(true){
-        block.lock();
-        output();
-        block.unlock();
-        this_thread::sleep_for(chrono::milliseconds(4));
-
-    }
  }
 
- Controller::~Controller() {
-
-}
+ Controller::~Controller() {}
 
 void Controller::initialization(){
     left_stick_y = 0;
@@ -31,7 +22,7 @@ void Controller::initialization(){
     r2_trigger = 0;
     square = false;
     triangule = false;
-    circule = false;
+    circle = false;
     x = false;
     l1 = false;
     l2 = false;
@@ -46,6 +37,7 @@ void Controller::initialization(){
     is_l3_up = false;
     is_r3_up = false;
 }
+
 void Controller::continue_reading() {
     ifstream file ("/dev/hidraw3", ios::in|ios::binary);
     while(file.is_open())
@@ -54,6 +46,7 @@ void Controller::continue_reading() {
         file.read (bytes, sizeof(bytes) - 1);
         block.lock();
         update_inputs();
+        set_events();
         block.unlock();
 
     }
@@ -62,22 +55,76 @@ void Controller::continue_reading() {
     terminate();
 }
 
-void Controller::output(){
-   if(square) cout << "square " << endl;
-   if(triangule) cout << "triangule " << endl;
-   if (circule) cout << "circule " << endl;
-   if(x) cout << "x " << endl;
-   if(l1) cout << "L1 " << endl ;
-   if(l2) cout << "L2 " << (int) l2_trigger << endl;
-   if(r1) cout << "R1 " << endl;
-   if(r2) cout << "R2 "  << (int) r2_trigger << endl;
-   if(opt) cout << "OPT" << endl;
-   if(left_buttons  <= 7 ) cout << " SETA (0 = ↑) (1 = ↑→) (2 = → ) (3 = ↓→) (4 = ↓) ( 5 = ↓←) (6 = ←) (7 = ↑←)"<< (int) left_buttons << endl;
-   if((left_stick_y  > 10) || (left_stick_x > 10)) cout << "L3 X: "<< (int) left_stick_x << " L3 Y: " << (int) left_stick_y << endl;
-   if((right_stick_y  > 10) || (right_stick_x > 10)) cout << "R3 X: "<< (int) right_stick_x << " R3 Y: " << (int) right_stick_y << endl;
-   if(share) cout << "SHARED " << endl;
-   if(l3) cout << "L3 " << endl;
-   if(r3) cout << "R3 " << endl;
+
+void Controller::set_events(){
+   if(square){
+       auto *e = new Event(SQUARE);
+       event_queue.push(e);
+   }
+
+   if(triangule) {
+       auto *e = new Event(TRIANGLE);
+       event_queue.push(e);
+   }
+   if (circle) {
+       auto *e = new Event(CIRCLE);
+       event_queue.push(e);
+   }
+   if(x){
+       auto *e = new Event(X);
+       event_queue.push(e);
+   }
+   if(l1) {
+       auto *e = new Event(L1);
+       event_queue.push(e);
+   }
+   if(l2) {
+       auto *e = new Trigger_Event(L2, l2_trigger);
+       event_queue.push(e);
+   }
+   if(r1){
+       auto *e = new Event(R1);
+       event_queue.push(e);
+   }
+   if(r2) {
+       auto *e = new Trigger_Event(R2, r2_trigger);
+       event_queue.push(e);
+   }
+   if(opt) {
+       auto *e = new Event(OPT);
+       event_queue.push(e);
+   }
+   if(left_buttons  <= 7 ){
+       auto *e = new Trigger_Event(LEFT_B, left_buttons);
+       event_queue.push(e);
+   }
+   if((left_stick_y  > 10) || (left_stick_x > 10)) {
+       auto *e = new Stick_Event(L3_M, left_stick_x, left_stick_y, is_l3_up, is_l3_right);
+       event_queue.push(e);
+   }
+   if((right_stick_y  > 10) || (right_stick_x > 10)) {
+       auto *e = new Stick_Event(R3_M, right_stick_x, left_stick_y, is_r3_up, is_r3_right);
+       event_queue.push(e);
+   }
+   if(share) {
+       auto *e = new Event(SHARE);
+       event_queue.push(e);
+   }
+   if(l3) {
+       auto *e = new Event(L3);
+       event_queue.push(e);
+   }
+   if(r3) {
+       auto *e = new Event(R3);
+       event_queue.push(e);
+   }
+}
+queue<void *> Controller::get_events() {
+    block.lock();
+    queue<void *> temp;
+    swap(temp, event_queue);
+    block.unlock();
+    return temp;
 }
 
 char Controller::absolute(char b){
@@ -102,7 +149,7 @@ void Controller::update_inputs() {
     left_stick_y = absolute(bytes[BYTE_LEFT_Y]);
     square = get_bit(bytes[BYTE_BUTTONS], BIT_SQR);
     triangule = get_bit(bytes[BYTE_BUTTONS], BIT_TRI);
-    circule = get_bit(bytes[BYTE_BUTTONS], BIT_CIR);
+    circle = get_bit(bytes[BYTE_BUTTONS], BIT_CIR);
     x = get_bit(bytes[BYTE_BUTTONS], BIT_X);
     l1 = get_bit(bytes[BYTE_SPECIALS], BIT_L1);
     l2 = get_bit(bytes[BYTE_SPECIALS], BIT_L2);
