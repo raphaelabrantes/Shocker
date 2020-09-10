@@ -16,7 +16,7 @@ map<int, string> Parser::get_key_maps(const string& filename){
             number++;
             int equal_signal = line.find('=');
             token=line.substr(0, equal_signal);
-            key=line.substr(equal_signal+1, line.size());
+            key=line.substr(equal_signal+1, line.size() -1);
 
             if(check_valid(token,  SQUARE))        key_maps[SQUARE] = key;
             else if(check_valid(token,  TRIANGLE)) key_maps[TRIANGLE] = key;
