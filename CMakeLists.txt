@@ -5,5 +5,11 @@ project(DualShocker C CXX)
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -pthread")
 include_directories(src/include)
 include_directories(libs)
-add_executable(NewShocker src/main.cpp src/ControllerInputReader.cpp src/EventManager.cpp src/Action.cpp)
+add_executable(NewShocker
+        src/main.cpp
+        src/ControllerInputReader.cpp
+        src/EventManager.cpp
+        src/Action.cpp
+        src/JsonMapper.cpp
+        )
 target_compile_options(NewShocker PRIVATE -Wall -Wextra -Wpedantic -Werror)
