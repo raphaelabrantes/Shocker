@@ -23,9 +23,9 @@ namespace Actions {
 
     };
 
-    class Button : Action {
+    class Button : public Action {
     public:
-        Button(const std::string &key, int fd);
+        Button(int key, int fd);
 
         void activate();
 

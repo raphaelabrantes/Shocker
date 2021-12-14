@@ -11,7 +11,7 @@ namespace Actions {
     Action::Action(std::string command) : _command(std::move(command)) {}
 
 
-    Button::Button(const std::string &key, int fd) : Action(key), _fd(fd), _key(std::atoi(key.c_str())) {}
+    Button::Button(int key, int fd) : Action(""), _fd(fd), _key(key) {}
 
     void Button::activate() {
         _inputEvent.type = EV_KEY;
