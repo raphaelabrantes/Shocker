@@ -10,13 +10,6 @@ namespace EventManager {
 
     EventManager::EventManager(Controller::ControllerInputReader &controllerInputReader) :
             _controllerInputReader(controllerInputReader) {
-        std::ifstream keysfile("profiles/text.json");
-        if (!keysfile.is_open()) {
-            std::cout << "Failed to open keys" << std::endl;
-            exit(1);
-        }
-        keysfile >> keys;
-        keysfile.close();
 
     }
 
