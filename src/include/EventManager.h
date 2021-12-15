@@ -9,23 +9,26 @@
 #include <ControllerInputReader.h>
 #include <nlohmann/json.hpp>
 #include <linux/uinput.h>
+#include <Action.h>
 
 extern "C" {
-int start_env(nlohmann::json &js, uinput_setup &setup);
+int start_env(const std::unordered_map<std::string, Actions::Action*>& map, uinput_setup &setup);
 }
 
 namespace EventManager {
     class EventManager {
     public:
-        EventManager(Controller::ControllerInputReader &controllerInputReader);
+        EventManager(Controller::ControllerInputReader &controllerInputReader,
+                     std::unordered_map<std::string, Actions::Action *> &keyMap);
 
+        ~EventManager();
         [[noreturn]] void start();
 
     private:
         Controller::ControllerInputReader _controllerInputReader;
-        nlohmann::json keys;
-        int pd;
-        uinput_setup uinputSetup;
+        std::unordered_map<std::string, Actions::Action *> _keyMap;
+        int _fd;
+        uinput_setup uinputSetup = {};
     };
 }
 
