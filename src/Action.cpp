@@ -10,10 +10,14 @@
 namespace Actions {
     Action::Action(std::string command) : _command(std::move(command)) {}
 
+    std::string Action::getCommand() const{
+        return _command;
+    }
 
-    Button::Button(int key, int fd) : Action(""), _fd(fd), _key(key) {}
 
-    void Button::activate() {
+    Button::Button(int key) : Action(""), _key(key) {}
+
+    void Button::activate(int16_t) {
         _inputEvent.type = EV_KEY;
         _inputEvent.code = _key;
         _inputEvent.value = 1;
@@ -40,5 +44,12 @@ namespace Actions {
         emit();
     }
 
+    int Button::getKey() const {
+        return _key;
+    }
+
+    void Button::setFd(int fd) {
+        _fd = fd;
+    }
 
 }

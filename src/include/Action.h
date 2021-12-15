@@ -14,10 +14,11 @@ namespace Actions {
     public:
         Action(std::string command);
 
-        virtual void activate() = 0;
+        virtual void activate(int16_t value) = 0;
 
         virtual void deactivate() = 0;
 
+         std::string getCommand() const;
     protected:
         std::string _command;
 
@@ -25,11 +26,15 @@ namespace Actions {
 
     class Button : public Action {
     public:
-        Button(int key, int fd);
+        Button(int key);
 
-        void activate();
+        void activate(int16_t);
 
         void deactivate();
+
+        void setFd(int fd);
+
+        int getKey() const;
 
     private:
         void emit();
