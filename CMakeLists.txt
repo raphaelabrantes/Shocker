@@ -3,4 +3,14 @@ cmake_minimum_required(VERSION 3.10)
 project(DualShocker C CXX)
 # add the executable
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11 -pthread")
-add_executable(DualSocker main.cpp controller.cpp controller.h events.cpp events.h parser.cpp parser.h vinput.cpp vinput.h)
+include_directories(src/include)
+include_directories(libs)
+add_executable(NewShocker
+        src/main.cpp
+        src/ControllerInputReader.cpp
+        src/EventManager.cpp
+        src/Action.cpp
+        src/JsonMapper.cpp
+        src/EventConverter.cpp
+        )
+target_compile_options(NewShocker PRIVATE -Wall -Wextra -Wpedantic -Werror)
