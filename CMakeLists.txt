@@ -11,5 +11,6 @@ add_executable(NewShocker
         src/EventManager.cpp
         src/Action.cpp
         src/JsonMapper.cpp
+        src/EventConverter.cpp
         )
 target_compile_options(NewShocker PRIVATE -Wall -Wextra -Wpedantic -Werror)
