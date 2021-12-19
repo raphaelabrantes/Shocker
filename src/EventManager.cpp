@@ -10,8 +10,9 @@
 namespace EventManager {
 
     EventManager::EventManager(Controller::ControllerInputReader &controllerInputReader,
+                               EventConverter &eventConverter,
                                std::unordered_map<std::string, Actions::Action *> &keyMap) :
-            _controllerInputReader(controllerInputReader), _keyMap(keyMap) {
+            _eventConverter(eventConverter), _controllerInputReader(controllerInputReader), _keyMap(keyMap) {
         _fd = start_env(_keyMap, uinputSetup);
 
     }
@@ -20,11 +21,40 @@ namespace EventManager {
         auto *event = new js_event;
         do {
             _controllerInputReader.getEvent(event);
-            std::cout << static_cast<int>(event->type) << " " << static_cast<int>(event->number) << " "
-                      << static_cast<int16_t>(event->value) << std::endl;
+            std::cout << "TYPE: " << static_cast<int>(event->type) << "KEY: " << static_cast<int>(event->number)
+                      << " VALUE: " << event->value << std::endl;
+            if (event->type == JS_EVENT_AXIS) {
+                dealWithTriggers(event);
+            } else {
+                dealWithButtons(event);
+            }
 
         } while (true);
 
+    }
+
+    void EventManager::dealWithButtons(js_event *event) const {
+        auto action = _eventConverter.convert(event);
+        if (event->value) {
+            action->activate(1);
+        } else {
+            action->deactivate();
+        }
+    }
+
+    void EventManager::dealWithTriggers(js_event *event) const {
+        if (!(event->number == 2 || event->number == 5)) {
+            if (event->value == 0) {
+                event->value = -1;
+                auto action1 = _eventConverter.convert(event);
+                event->value = 4;
+                auto action2 = _eventConverter.convert(event);
+                action1->deactivate();
+                action2->deactivate();
+            } else {
+                dealWithButtons(event);
+            }
+        }
     }
 
     EventManager::~EventManager() {
