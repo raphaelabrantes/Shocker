@@ -5,16 +5,19 @@
 #include <ControllerInputReader.h>
 #include <EventManager.h>
 #include <JsonMapper.h>
+#include <EventConverter.h>
+
 
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
     std::string profileFile("profiles/text.json");
-    if(argc < 1){
+    if (argc < 1) {
         profileFile.assign(argv[1]);
     }
 
     auto keybinding = JsonMapper::createMapping(profileFile);
     Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
-    EventManager::EventManager eventManager(controllerInputReader, keybinding);
-    //eventManager.start();
+    EventConverter eventConverter(keybinding);
+    EventManager::EventManager eventManager(controllerInputReader, eventConverter, keybinding);
+    eventManager.start();
 }
