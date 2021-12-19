@@ -18,19 +18,25 @@ namespace Actions {
     Button::Button(int key) : Action(""), _key(key) {}
 
     void Button::activate(int16_t) {
-        _inputEvent.type = EV_KEY;
-        _inputEvent.code = _key;
-        _inputEvent.value = 1;
-        emit();
-        sync();
+        if (!_isPressed) {
+            _inputEvent.type = EV_KEY;
+            _inputEvent.code = _key;
+            _inputEvent.value = 1;
+            emit();
+            sync();
+            _isPressed = true;
+        }
     }
 
     void Button::deactivate() {
-        _inputEvent.type = EV_KEY;
-        _inputEvent.code = _key;
-        _inputEvent.value = 0;
-        emit();
-        sync();
+        if (_isPressed) {
+            _inputEvent.type = EV_KEY;
+            _inputEvent.code = _key;
+            _inputEvent.value = 0;
+            emit();
+            sync();
+            _isPressed = false;
+        }
     }
 
     void Button::emit() {

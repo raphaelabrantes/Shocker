@@ -44,6 +44,7 @@ namespace Actions {
         input_event _inputEvent;
         int _fd;
         int _key;
+        bool _isPressed = false;
     };
 
 }
