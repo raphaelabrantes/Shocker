@@ -11,16 +11,22 @@ std::unordered_map<std::string, Actions::Action *> JsonMapper::createMapping(con
     const nlohmann::json &keyMaps = createJsonFromFile("key_codes/keys.json");
     std::unordered_map<std::string, Actions::Action *> mapping;
     std::string command("command");
+    std::string button("button");
 
     for (auto it = profileJson.begin(); it != profileJson.end(); ++it) {
-        std::string value(it.value().get<std::string>());
-        if (value.find(command) != std::string::npos) {
-            assert(false);
-        } else {
-            std::cout << " Key: " << it.key() << " Value: " << value << " keymapsAT: " << keyMaps.at(value)
-                      << std::endl;
+        if (it->contains(command)) {
+            auto value = it->at(command).get<std::string>();
+            auto *action = new Actions::Command(value);
+            mapping[it.key()] = action;
+
+        } else if (it->contains(button)) {
+            auto value = it->at(button).get<std::string>();
             auto *action = new Actions::Button(keyMaps.at(value));
             mapping[it.key()] = action;
+
+        } else {
+            std::cout << "Not implemented " << it.value() << std::endl;
+            assert(false);
         }
     }
     return mapping;
