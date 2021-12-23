@@ -7,6 +7,8 @@
 
 #include <string>
 #include <linux/uinput.h>
+#include <thread>
+#include <atomic>
 
 namespace Actions {
     class Action {
@@ -18,10 +20,10 @@ namespace Actions {
 
         virtual void deactivate() = 0;
 
-         std::string getCommand() const;
+        std::string getCommand() const;
+
     protected:
         std::string _command;
-
     };
 
     class Button : public Action {
@@ -47,5 +49,19 @@ namespace Actions {
         bool _isPressed = false;
     };
 
+    class Command : public Action {
+    public:
+        Command(std::string &command);
+
+        void activate(int16_t);
+
+        void deactivate();
+
+    private:
+        std::atomic<bool> _done;
+        std::thread *_thread = nullptr;
+
+        void start();
+    };
 }
 #endif //DUALSHOCKER_ACTIONS_H
