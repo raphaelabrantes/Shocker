@@ -10,7 +10,7 @@
 namespace Actions {
     Action::Action(std::string command) : _command(std::move(command)) {}
 
-    std::string Action::getCommand() const{
+    std::string Action::getCommand() const {
         return _command;
     }
 
@@ -58,4 +58,22 @@ namespace Actions {
         _fd = fd;
     }
 
+    Command::Command(std::string &command) : Action(std::move(command)), _done(true) {}
+
+    void Command::activate(int16_t) {
+        if (_done) {
+            delete _thread;
+            _thread = new std::thread(&Command::start, this);
+            _thread->detach();
+        }
+    }
+
+    void Command::deactivate() {
+    }
+
+    void Command::start() {
+        _done = false;
+        system(_command.c_str());
+        _done = true;
+    }
 }
