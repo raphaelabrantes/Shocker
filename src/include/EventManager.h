@@ -13,7 +13,8 @@
 #include <EventConverter.h>
 
 extern "C" {
-int start_env(const std::unordered_map<std::string, Actions::Action*>& map, uinput_setup &setup);
+int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uinput_setup &setup);
+bool start_key(int fd, Actions::Action *button);
 }
 
 namespace EventManager {

@@ -71,14 +71,16 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
     }
     ioctl(fd, UI_SET_EVBIT, EV_KEY);
     for (auto &it: map) {
-        if (it.second->getCommand().empty()) {
-            auto *button = dynamic_cast<Actions::Button *>(it.second);
-            if (button) {
-                button->setFd(fd);
-                ioctl(fd, UI_SET_KEYBIT, button->getKey());
-            } else {
+        if (!start_key(fd, it.second)) {
+            if (auto *macro = dynamic_cast<Actions::Macro *>(it.second)) {
+                for (auto button: macro->getActions()) {
+                    if (!start_key(fd, button)) {
+                        assert(false);
+                    }
+                }
+            } else if (dynamic_cast<Actions::Command *>(it.second)) continue;
+            else
                 assert(false);
-            }
         }
     }
     memset(&uinputSetup, 0, sizeof(uinputSetup));
@@ -90,4 +92,13 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
     ioctl(fd, UI_DEV_CREATE);
     return fd;
 
+}
+
+bool start_key(int fd, Actions::Action *action) {
+    if (auto *button = dynamic_cast<Actions::Button *>(action)) {
+        button->setFd(fd);
+        ioctl(fd, UI_SET_KEYBIT, button->getKey());
+        return true;
+    }
+    return false;
 }
