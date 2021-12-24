@@ -9,6 +9,9 @@
 #include <linux/uinput.h>
 #include <thread>
 #include <atomic>
+#include <unordered_map>
+#include <vector>
+#include <nlohmann/json.hpp>
 
 namespace Actions {
     class Action {
@@ -62,6 +65,22 @@ namespace Actions {
         std::thread *_thread = nullptr;
 
         void start();
+    };
+
+    class Macro : public Action {
+    public:
+        Macro(std::string &command,
+              const nlohmann::json &keyMaps);
+
+        void activate(int16_t);
+
+        void deactivate();
+
+        std::vector<Action *> getActions();
+
+    private:
+
+        std::vector<Actions::Action *> _actionVector;
     };
 }
 #endif //DUALSHOCKER_ACTIONS_H
