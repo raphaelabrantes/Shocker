@@ -81,5 +81,19 @@
   "KP2": 80,
   "KP3": 81,
   "KP0": 82,
-  "KPDOT": 83
+  "KPDOT": 83,
+  "F11": 87,
+  "F12": 88,
+  "RIGHTCTRL": 97,
+  "RIGHTALT": 100,
+  "HOME": 102,
+  "UP": 103,
+  "PAGEUP": 104,
+  "LEFT": 105,
+  "RIGHT": 106,
+  "END": 107,
+  "DOWN": 108,
+  "PAGEDOWN": 109,
+  "INSERT": 110,
+  "DELETE": 111
 }

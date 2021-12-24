@@ -9,10 +9,10 @@
     "button": "LEFTALT"
   },
   "X": {
-    "command": "firefox steam"
+    "command": "firefox https://abrantes.dev"
   },
   "L1": {
-    "button": "C"
+    "button": "LEFTSHIFT"
   },
   "L3": {
     "button": "G"
@@ -36,42 +36,42 @@
     "button": "ENTER"
   },
   "LEFT_BU": {
-    "button": "Z"
+    "button": "UP"
   },
   "LEFT_BR": {
-    "button": "3"
+    "button": "RIGHT"
   },
   "LEFT_BL": {
-    "button": "4"
+    "button": "LEFT"
   },
   "LEFT_BD": {
-    "button": "5"
+    "button": "DOWN"
   },
   "L3_MU": {
-    "button": "V"
-  },
-  "L3_MR": {
-    "button": "G"
-  },
-  "L3_ML": {
-    "button": "L"
-  },
-  "L3_MD": {
-    "button": "J"
-  },
-  "R3_MU": {
     "button": "W"
   },
-  "R3_MR": {
+  "L3_MR": {
     "button": "D"
   },
-  "R3_ML": {
+  "L3_ML": {
     "button": "A"
   },
-  "R3_MD": {
+  "L3_MD": {
     "button": "S"
   },
+  "R3_MU": {
+    "button": "PAGEUP"
+  },
+  "R3_MR": {
+    "button": "RIGHT"
+  },
+  "R3_ML": {
+    "button": "LEFT"
+  },
+  "R3_MD": {
+    "button": "PAGEDOWN"
+  },
   "PS": {
-    "button": "SPACE"
+    "macro": "E+C+H+O+SPACE+O+I+SPACE+G+A+T+I+N+H+A+ENTER"
   }
 }
