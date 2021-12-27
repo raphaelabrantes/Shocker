@@ -95,5 +95,7 @@
   "DOWN": 108,
   "PAGEDOWN": 109,
   "INSERT": 110,
-  "DELETE": 111
+  "DELETE": 111,
+  "MOUSE_X": 0,
+  "MOUSE_Y": 1
 }

@@ -36,16 +36,24 @@
     "button": "ENTER"
   },
   "LEFT_BU": {
-    "button": "UP"
+    "mouse": "MOUSE_X",
+    "sensibility": 32765,
+    "positive": true
   },
   "LEFT_BR": {
-    "button": "RIGHT"
+    "mouse": "MOUSE_Y",
+    "sensibility": 32765,
+    "positive": true
   },
   "LEFT_BL": {
-    "button": "LEFT"
+    "mouse": "MOUSE_Y",
+    "sensibility": 32765,
+    "positive": false
   },
   "LEFT_BD": {
-    "button": "DOWN"
+    "mouse": "MOUSE_X",
+    "sensibility": 32765,
+    "positive": false
   },
   "L3_MU": {
     "button": "W"

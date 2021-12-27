@@ -36,7 +36,7 @@ namespace EventManager {
     void EventManager::dealWithButtons(js_event *event) const {
         auto action = _eventConverter.convert(event);
         if (event->value) {
-            action->activate(1);
+            action->activate(event->value);
         } else {
             action->deactivate();
         }
@@ -69,7 +69,10 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
         std::cout << "It was not possible to create the device" << std::endl;
         exit(1);
     }
+    ioctl(fd, UI_SET_EVBIT, EV_REL);
     ioctl(fd, UI_SET_EVBIT, EV_KEY);
+    ioctl(fd, UI_SET_RELBIT, REL_X);
+    ioctl(fd, UI_SET_RELBIT, REL_Y);
     for (auto &it: map) {
         if (!start_key(fd, it.second)) {
             if (auto *macro = dynamic_cast<Actions::Macro *>(it.second)) {
@@ -95,10 +98,14 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
 }
 
 bool start_key(int fd, Actions::Action *action) {
-    if (auto *button = dynamic_cast<Actions::Button *>(action)) {
+    if (auto *mouse = dynamic_cast<Actions::Mouse *>(action)) {
+        mouse->setFd(fd);
+        return true;
+    } else if (auto *button = dynamic_cast<Actions::Button *>(action)) {
         button->setFd(fd);
         ioctl(fd, UI_SET_KEYBIT, button->getKey());
         return true;
     }
     return false;
 }
+
