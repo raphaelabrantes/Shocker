@@ -5,6 +5,7 @@
 
 #include <utility>
 #include <unistd.h>
+#include <iostream>
 
 
 namespace Actions {
@@ -104,4 +105,34 @@ namespace Actions {
     void Macro::deactivate() {
 
     }
+
+    Mouse::Mouse(int key, int sensibility, bool isPositive) :
+        Button(key),
+        _sensibility(sensibility),
+        _isPositive(isPositive){
+    }
+
+    void Mouse::activate(int16_t value) {
+        _inputEvent.type = EV_REL;
+        _inputEvent.code = getKey();
+        if(_isPositive){
+            if(value > 0){
+                _inputEvent.value = abs(value - _sensibility);
+            } else {
+                _inputEvent.value = abs(value + _sensibility);
+            }
+        } else {
+            if(value > 0){
+                _inputEvent.value = - abs(value + _sensibility);
+            } else {
+                _inputEvent.value = - abs(value - _sensibility);
+            }
+        }
+        emit();
+        sync();
+    }
+
+    void Mouse::deactivate() {}
+
+
 }
