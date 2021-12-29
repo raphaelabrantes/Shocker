@@ -70,9 +70,7 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
         exit(1);
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
-    ioctl(fd, UI_SET_EVBIT, EV_KEY);
-    ioctl(fd, UI_SET_RELBIT, REL_X);
-    ioctl(fd, UI_SET_RELBIT, REL_Y);
+    ioctl(fd, UI_SET_KEYBIT, BTN_LEFT);
     for (auto &it: map) {
         if (!start_key(fd, it.second)) {
             if (auto *macro = dynamic_cast<Actions::Macro *>(it.second)) {
@@ -86,6 +84,9 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
                 assert(false);
         }
     }
+    ioctl(fd, UI_SET_EVBIT, EV_KEY);
+    ioctl(fd, UI_SET_RELBIT, REL_X);
+    ioctl(fd, UI_SET_RELBIT, REL_Y);
     memset(&uinputSetup, 0, sizeof(uinputSetup));
     uinputSetup.id.bustype = BUS_USB;
     uinputSetup.id.vendor = 0x1234;

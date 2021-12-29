@@ -107,32 +107,36 @@ namespace Actions {
     }
 
     Mouse::Mouse(int key, int sensibility, bool isPositive) :
-        Button(key),
-        _sensibility(sensibility),
-        _isPositive(isPositive){
+            Button(key),
+            _sensibility(sensibility),
+            _isPositive(isPositive) {
     }
 
     void Mouse::activate(int16_t value) {
-        _inputEvent.type = EV_REL;
-        _inputEvent.code = getKey();
-        if(_isPositive){
-            if(value > 0){
-                _inputEvent.value = abs(value - _sensibility);
-            } else {
-                _inputEvent.value = abs(value + _sensibility);
-            }
-        } else {
-            if(value > 0){
-                _inputEvent.value = - abs(value + _sensibility);
-            } else {
-                _inputEvent.value = - abs(value - _sensibility);
-            }
+        _value = value;
+        if (!_isPressed) {
+            _isPressed = true;
+            delete _mouseThread;
+            _mouseThread = new std::thread(&Mouse::start, this);
+            _mouseThread->detach();
         }
-        emit();
-        sync();
     }
 
-    void Mouse::deactivate() {}
+    void Mouse::deactivate() {
+        _isPressed = false;
+    }
+
+    void Mouse::start() {
+        while (_isPressed) {
+            _inputEvent.type = EV_REL;
+            _inputEvent.code = getKey();
+            __s32 x = _sensibility * abs(_value) / 32767;
+            _inputEvent.value = _isPositive ? x : -x;
+            emit();
+            sync();
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        }
+    }
 
 
 }

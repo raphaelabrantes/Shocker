@@ -94,8 +94,14 @@ namespace Actions {
         void deactivate();
 
     private:
+
+        void start();
+
         int _sensibility;
         bool _isPositive;
+        std::thread *_mouseThread = nullptr;
+        std::atomic<bool> _isPressed{false};
+        std::atomic<int16_t> _value{0};
     };
 }
 #endif //DUALSHOCKER_ACTIONS_H
