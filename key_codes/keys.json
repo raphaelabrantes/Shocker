@@ -97,5 +97,8 @@
   "INSERT": 110,
   "DELETE": 111,
   "MOUSE_X": 0,
-  "MOUSE_Y": 1
+  "MOUSE_Y": 1,
+  "BTN_LEFT": 272,
+  "BTN_RIGHT": 273,
+  "BTN_MIDDLE": 274
 }
