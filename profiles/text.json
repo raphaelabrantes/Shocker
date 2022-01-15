@@ -35,17 +35,25 @@
   "R2": {
     "button": "ENTER"
   },
-  "LEFT_BU": {
-    "button": "UP"
+  "R3_MU": {
+    "mouse": "MOUSE_Y",
+    "sensibility": 50,
+    "positive": false
   },
-  "LEFT_BR": {
-    "button": "RIGHT"
+  "R3_MR": {
+    "mouse": "MOUSE_X",
+    "sensibility": 50,
+    "positive": true
   },
-  "LEFT_BL": {
-    "button": "LEFT"
+  "R3_ML": {
+    "mouse": "MOUSE_X",
+    "sensibility": 50,
+    "positive": false
   },
-  "LEFT_BD": {
-    "button": "DOWN"
+  "R3_MD": {
+    "mouse": "MOUSE_Y",
+    "sensibility": 50,
+    "positive": true
   },
   "L3_MU": {
     "button": "W"
@@ -59,17 +67,17 @@
   "L3_MD": {
     "button": "S"
   },
-  "R3_MU": {
-    "button": "PAGEUP"
+  "LEFT_BU": {
+    "button": "UP"
   },
-  "R3_MR": {
+  "LEFT_BR": {
     "button": "RIGHT"
   },
-  "R3_ML": {
+  "LEFT_BL": {
     "button": "LEFT"
   },
-  "R3_MD": {
-    "button": "PAGEDOWN"
+  "LEFT_BD": {
+    "button": "DOWN"
   },
   "PS": {
     "macro": "E+C+H+O+SPACE+O+I+SPACE+G+A+T+I+N+H+A+ENTER"

@@ -41,12 +41,14 @@ namespace Actions {
 
         int getKey() const;
 
-    private:
+    protected:
         void emit();
 
         void sync();
 
         input_event _inputEvent;
+
+    private:
         int _fd;
         int _key;
         bool _isPressed = false;
@@ -81,6 +83,25 @@ namespace Actions {
     private:
 
         std::vector<Actions::Action *> _actionVector;
+    };
+
+    class Mouse : public Button {
+    public:
+        Mouse(int key, int sensibility, bool isPositive);
+
+        void activate(int16_t value);
+
+        void deactivate();
+
+    private:
+
+        void start();
+
+        int _sensibility;
+        bool _isPositive;
+        std::thread *_mouseThread = nullptr;
+        std::atomic<bool> _isPressed{false};
+        std::atomic<int16_t> _value{0};
     };
 }
 #endif //DUALSHOCKER_ACTIONS_H
