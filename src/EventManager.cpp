@@ -21,7 +21,7 @@ namespace EventManager {
         auto *event = new js_event;
         do {
             _controllerInputReader.getEvent(event);
-            std::cout << "TYPE: " << static_cast<int>(event->type) << "KEY: " << static_cast<int>(event->number)
+            std::cout << "TYPE: " << static_cast<int>(event->type) << " KEY: " << static_cast<int>(event->number)
                       << " VALUE: " << event->value << std::endl;
             if (event->type == JS_EVENT_AXIS) {
                 dealWithTriggers(event);
@@ -66,7 +66,7 @@ namespace EventManager {
 int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uinput_setup &uinputSetup) {
     int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
     if (fd < 0) {
-        std::cout << "It was not possible to create the device" << std::endl;
+        std::cout << "It was not possible to create the keyboard and mouse device" << std::endl;
         exit(1);
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
@@ -80,8 +80,11 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
                     }
                 }
             } else if (dynamic_cast<Actions::Command *>(it.second)) continue;
-            else
+            else {
+                std::cout << "Unrecognised Action at Key: " << it.first << std::endl;
+                std::cout << it.second << std::endl;
                 assert(false);
+            }
         }
     }
     ioctl(fd, UI_SET_EVBIT, EV_KEY);
@@ -91,7 +94,7 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
     uinputSetup.id.bustype = BUS_USB;
     uinputSetup.id.vendor = 0x1234;
     uinputSetup.id.product = 0x5678;
-    strcpy(uinputSetup.name, "Shocker Keyboard");
+    strcpy(uinputSetup.name, "Shocker Keyboard and Mouse");
     ioctl(fd, UI_DEV_SETUP, &uinputSetup);
     ioctl(fd, UI_DEV_CREATE);
     return fd;

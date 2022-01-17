@@ -42,7 +42,7 @@ std::unordered_map<std::string, Actions::Action *> JsonMapper::createMapping(con
             mapping[it.key()] = action;
 
         } else {
-            std::cout << "Not implemented " << it.value() << std::endl;
+            std::cout << "Type of action not implemented " << it.value() << std::endl;
             assert(false);
         }
     }
@@ -53,7 +53,7 @@ std::unordered_map<std::string, Actions::Action *> JsonMapper::createMapping(con
 nlohmann::json JsonMapper::createJsonFromFile(const std::string &filePath) {
     std::ifstream jsonFile(filePath);
     if (!jsonFile.is_open()) {
-        std::cout << "Failed to open json file: " << filePath << std::endl;
+        std::cout << "Failed to open profile file: " << filePath << std::endl;
         exit(1);
     }
     nlohmann::json json;

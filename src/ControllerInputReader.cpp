@@ -6,6 +6,11 @@
 namespace Controller{
     ControllerInputReader::ControllerInputReader(std::string& filename) {
         file = open(filename.c_str(), O_RDONLY);
+        if(file < 0) {
+            std::cout << "Unable to open joystick file " << filename << std::endl
+            << "Check if controller is connected." << std::endl;
+            exit(-1);
+        }
     }
 
     ControllerInputReader::~ControllerInputReader(){
@@ -19,7 +24,7 @@ namespace Controller{
                 return;
             }
         }
-        std::cout << "Error reading file: " << static_cast<int>(bytes) << std::endl;
+        std::cout << "Controller Error (disconected): " << static_cast<int>(bytes) << std::endl;
         exit(-1);
     }
 }
