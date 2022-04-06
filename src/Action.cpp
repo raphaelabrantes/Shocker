@@ -2,7 +2,6 @@
 // Created by godofall on 12/12/2021.
 //
 #include <Action.h>
-
 #include <utility>
 #include <unistd.h>
 #include <iostream>
@@ -76,6 +75,10 @@ namespace Actions {
         _done = false;
         system(_command.c_str());
         _done = true;
+    }
+
+    Command::~Command() {
+        delete _thread;
     }
 
     Macro::Macro(std::string &command,

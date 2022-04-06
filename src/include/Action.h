@@ -42,7 +42,14 @@ namespace Actions {
         int getKey() const;
 
     protected:
+#ifdef emit
+#undef emit
         void emit();
+#define emit
+#else
+        void emit();
+#endif
+
 
         void sync();
 
@@ -57,6 +64,8 @@ namespace Actions {
     class Command : public Action {
     public:
         Command(std::string &command);
+
+        ~Command();
 
         void activate(int16_t);
 
