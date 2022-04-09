@@ -12,9 +12,10 @@
 class JsonMapper {
 public:
     static std::unordered_map<std::string, Actions::Action *> createMapping(const std::string &profile);
-
 private:
     static nlohmann::json createJsonFromFile(const std::string &filePath);
+
+    static Actions::Action *createActions(nlohmann::json &json, const nlohmann::json &keymap);
 };
 
 #endif //DUALSHOCKER_JSONMAPPER_H

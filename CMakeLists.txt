@@ -7,5 +7,5 @@ add_subdirectory(src)
 add_executable(NewShocker
         main.cpp
         )
-target_link_libraries(NewShocker $<TARGET_OBJECTS:Shocker>)
+target_link_libraries(NewShocker Shocker)
 target_compile_options(NewShocker PRIVATE -Wall -Wextra -Wpedantic -Werror)

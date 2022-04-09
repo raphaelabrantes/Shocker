@@ -11,12 +11,12 @@ add_library(Shocker
         EventConverter.cpp
         EventManager.cpp
         JsonMapper.cpp
-        include/Shocker.h)
+        )
 
 set_target_properties(Shocker
         PROPERTIES
         VERSION ${PROJECT_VERSION}
-        PUBLIC_HEADER "include/Action.h;include/ControllerInputReader.h;include/EventConverter.h;include/EventManager.h;include/JsonMapper.h;include/Shocker.h"
+        PUBLIC_HEADER "include/Action.h;include/ControllerInputReader.h;include/EventConverter.h;include/EventManager.h;include/JsonMapper.h;"
         )
 target_include_directories(Shocker PUBLIC include)
 install(TARGETS Shocker
