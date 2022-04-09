@@ -7,44 +7,15 @@
 
 
 std::unordered_map<std::string, Actions::Action *> JsonMapper::createMapping(const std::string &profile) {
-    const std::string command("command");
-    const std::string button("button");
-    const std::string macro("macro");
-    const std::string mouse("mouse");
-    const std::string sensibility("sensibility");
-    const std::string positive("positive");
-    
+
     const nlohmann::json &profileJson = createJsonFromFile(profile);
     const nlohmann::json &keyMaps = createJsonFromFile("key_codes/keys.json");
     std::unordered_map<std::string, Actions::Action *> mapping;
 
     for (auto it = profileJson.begin(); it != profileJson.end(); ++it) {
-        if (it->contains(command)) {
-            auto value = it->at(command).get<std::string>();
-            auto *action = new Actions::Command(value);
-            mapping[it.key()] = action;
-
-        } else if (it->contains(button)) {
-            auto value = it->at(button).get<std::string>();
-            auto *action = new Actions::Button(keyMaps.at(value));
-            mapping[it.key()] = action;
-
-        } else if (it->contains(macro)) {
-            auto value = it->at(macro).get<std::string>();
-            auto *action = new Actions::Macro(value, keyMaps);
-            mapping[it.key()] = action;
-
-        } else if(it->contains(mouse)){
-            auto value = it->at(mouse).get<std::string>();
-            auto sensiValue = it->at(sensibility).get<int>();
-            auto isPositive = it->at(positive).get<bool>();
-            auto *action = new Actions::Mouse(keyMaps.at(value), sensiValue, isPositive);
-            mapping[it.key()] = action;
-
-        } else {
-            std::cout << "Type of action not implemented " << it.value() << std::endl;
-            assert(false);
-        }
+        auto jsonObj = it->get<nlohmann::json>();
+        auto action = createActions(jsonObj, keyMaps);
+        mapping[it.key()] = action;
     }
     return mapping;
 }
@@ -61,3 +32,22 @@ nlohmann::json JsonMapper::createJsonFromFile(const std::string &filePath) {
     jsonFile.close();
     return json;
 }
+
+
+Actions::Action *JsonMapper::createActions(nlohmann::json &json, const nlohmann::json &keymap) {
+    auto type = json["type"].get<std::string>();
+    auto value = json["value"].get<std::string>();
+    if (type == "command") {
+        return new Actions::Command(value);
+    } else if (type == "button") {
+        return new Actions::Button(keymap.at(value).get<int>());
+    } else if (type == "mouse") {
+        auto sensibility = json["sensibility"].get<int>();
+        auto positive = json["positive"].get<bool>();
+        return new Actions::Mouse(keymap.at(value).get<int>(), sensibility, positive);
+    } else if (type == "macro") {
+        return new Actions::Macro(value, keymap);
+    }
+    std::cout << "Type of action not implemented " << json << std::endl;
+    assert(false);
+};

@@ -1,85 +1,110 @@
 {
   "SQUARE": {
-    "button": "LEFTCTRL"
+    "type": "button",
+    "value": "LEFTCTRL"
   },
   "TRIANGLE": {
-    "button": "T"
+    "type": "button",
+    "value": "T"
   },
   "CIRCLE": {
-    "button": "LEFTALT"
+    "type": "button",
+    "value": "LEFTALT"
   },
   "X": {
-    "command": "firefox https://abrantes.dev"
+    "type": "command",
+    "value": "firefox https://abrantes.dev"
   },
   "L1": {
-    "button": "LEFTSHIFT"
+    "type": "button",
+    "value": "LEFTSHIFT"
   },
   "L3": {
-    "button": "G"
+    "type": "button",
+    "value": "G"
   },
   "R1": {
-    "button": "B"
+    "type": "button",
+    "value": "B"
   },
   "R3": {
-    "button": "O"
+    "type": "button",
+    "value": "O"
   },
   "OPT": {
-    "button": "ESC"
+    "type": "button",
+    "value": "ESC"
   },
   "SHARE": {
-    "button": "R"
+    "type": "button",
+    "value": "R"
   },
   "L2": {
-    "button": "H"
+    "type": "button",
+    "value": "H"
   },
   "R2": {
-    "button": "ENTER"
+    "type": "button",
+    "value": "ENTER"
   },
   "R3_MU": {
-    "mouse": "MOUSE_Y",
+    "type": "mouse",
+    "value": "MOUSE_Y",
     "sensibility": 50,
     "positive": false
   },
   "R3_MR": {
-    "mouse": "MOUSE_X",
+    "type": "mouse",
+    "value": "MOUSE_X",
     "sensibility": 50,
     "positive": true
   },
   "R3_ML": {
-    "mouse": "MOUSE_X",
+    "type": "mouse",
+    "value": "MOUSE_X",
     "sensibility": 50,
     "positive": false
   },
   "R3_MD": {
-    "mouse": "MOUSE_Y",
+    "type": "mouse",
+    "value": "MOUSE_Y",
     "sensibility": 50,
     "positive": true
   },
   "L3_MU": {
-    "button": "W"
+    "type": "button",
+    "value": "W"
   },
   "L3_MR": {
-    "button": "D"
+    "type": "button",
+    "value": "D"
   },
   "L3_ML": {
-    "button": "A"
+    "type": "button",
+    "value": "A"
   },
   "L3_MD": {
-    "button": "S"
+    "type": "button",
+    "value": "S"
   },
   "LEFT_BU": {
-    "button": "UP"
+    "type": "button",
+    "value": "UP"
   },
   "LEFT_BR": {
-    "button": "RIGHT"
+    "type": "button",
+    "value": "RIGHT"
   },
   "LEFT_BL": {
-    "button": "LEFT"
+    "type": "button",
+    "value": "LEFT"
   },
   "LEFT_BD": {
-    "button": "DOWN"
+    "type": "button",
+    "value": "DOWN"
   },
   "PS": {
-    "macro": "E+C+H+O+SPACE+O+I+SPACE+G+A+T+I+N+H+A+ENTER"
+    "type": "macro",
+    "value": "E+C+H+O+SPACE+O+I+SPACE+G+A+T+I+N+H+A+ENTER"
   }
 }
