@@ -2,7 +2,9 @@
 // Created by godofall on 06/11/2021.
 //
 #include <iostream>
-#include <Shocker.h>
+#include <JsonMapper.h>
+#include <ControllerInputReader.h>
+#include <EventManager.h>
 
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
