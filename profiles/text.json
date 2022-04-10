@@ -137,6 +137,19 @@
       {
         "type": "button",
         "value": "ENTER"
+      },
+      {
+        "type": "macro",
+        "value": [
+          {
+            "type": "command",
+            "value": "steam"
+          }
+        ]
+      },
+      {
+        "type": "command",
+        "value": "firefox https://abrantes.dev"
       }
     ]
   }
