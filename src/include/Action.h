@@ -25,6 +25,8 @@ namespace Actions {
 
         std::string getCommand() const;
 
+        virtual void initiate(int fd) = 0;
+
     protected:
         std::string _command;
     };
@@ -37,9 +39,9 @@ namespace Actions {
 
         void deactivate();
 
-        void setFd(int fd);
-
         int getKey() const;
+
+        void initiate(int fd);
 
     protected:
 #ifdef emit
@@ -47,16 +49,19 @@ namespace Actions {
         void emit();
 #define emit
 #else
-        void emit();
-#endif
 
+        void emit();
+
+#endif
 
         void sync();
 
         input_event _inputEvent;
 
-    private:
+    protected:
         int _fd;
+
+    private:
         int _key;
         bool _isPressed = false;
     };
@@ -70,6 +75,8 @@ namespace Actions {
         void activate(int16_t);
 
         void deactivate();
+
+        void initiate(int) {};
 
     private:
         std::atomic<bool> _done;
@@ -88,6 +95,8 @@ namespace Actions {
 
         std::vector<Action *> getActions();
 
+        void initiate(int fd);
+
     private:
 
         std::vector<Actions::Action *> _actionVector;
@@ -100,6 +109,8 @@ namespace Actions {
         void activate(int16_t value);
 
         void deactivate();
+
+        void initiate(int fd);
 
     private:
 

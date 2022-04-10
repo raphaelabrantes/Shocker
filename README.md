@@ -157,7 +157,7 @@ if `MOUSE_X`), if false will move in the negative direction of the axis.
 Sensibility is the max amount of pixels that the axis will move in one iteration (20 ms)  while the button is being
 held.
 
-**Simple Macros**
+**Macros**
 
 ```json
 {
@@ -178,7 +178,7 @@ held.
  ```
 
 `CONTROLLER_BUTTON` being the name of the key in the DualShock button that you want to bind with.  
-The value is an array of actions, for now it can be only buttons, soon it will be every type of actions.
+The value is an array of actions, can be any type of action, even macros.
 
 **Commands**
 It will run any command you can execute in your terminal.
