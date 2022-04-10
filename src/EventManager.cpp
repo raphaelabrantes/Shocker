@@ -70,26 +70,11 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
         exit(1);
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
+    ioctl(fd, UI_SET_EVBIT, EV_KEY);
     ioctl(fd, UI_SET_KEYBIT, BTN_LEFT);
     for (auto &it: map) {
-        if (!start_key(fd, it.second)) {
-            if (auto *macro = dynamic_cast<Actions::Macro *>(it.second)) {
-                for (auto button: macro->getActions()) {
-                    if (!start_key(fd, button)) {
-                        assert(false);
-                    }
-                }
-            } else if (dynamic_cast<Actions::Command *>(it.second)) continue;
-            else {
-                std::cout << "Unrecognised Action at Key: " << it.first << std::endl;
-                std::cout << it.second << std::endl;
-                assert(false);
-            }
-        }
+        it.second->initiate(fd);
     }
-    ioctl(fd, UI_SET_EVBIT, EV_KEY);
-    ioctl(fd, UI_SET_RELBIT, REL_X);
-    ioctl(fd, UI_SET_RELBIT, REL_Y);
     memset(&uinputSetup, 0, sizeof(uinputSetup));
     uinputSetup.id.bustype = BUS_USB;
     uinputSetup.id.vendor = 0x1234;
@@ -100,16 +85,3 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uin
     return fd;
 
 }
-
-bool start_key(int fd, Actions::Action *action) {
-    if (auto *mouse = dynamic_cast<Actions::Mouse *>(action)) {
-        mouse->setFd(fd);
-        return true;
-    } else if (auto *button = dynamic_cast<Actions::Button *>(action)) {
-        button->setFd(fd);
-        ioctl(fd, UI_SET_KEYBIT, button->getKey());
-        return true;
-    }
-    return false;
-}
-
