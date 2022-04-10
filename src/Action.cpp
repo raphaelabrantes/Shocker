@@ -54,8 +54,9 @@ namespace Actions {
         return _key;
     }
 
-    void Button::setFd(int fd) {
+    void Button::initiate(int fd) {
         _fd = fd;
+        ioctl(_fd, UI_SET_KEYBIT, _key);
     }
 
     Command::Command(std::string &command) : Action(std::move(command)), _done(true) {}
@@ -101,6 +102,12 @@ namespace Actions {
 
     }
 
+    void Macro::initiate(int fd) {
+        for (auto action: _actionVector) {
+            action->initiate(fd);
+        }
+    }
+
     Mouse::Mouse(int key, int sensibility, bool isPositive) :
             Button(key),
             _sensibility(sensibility),
@@ -131,6 +138,11 @@ namespace Actions {
             sync();
             std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
+    }
+
+    void Mouse::initiate(int fd) {
+        _fd = fd;
+        ioctl(_fd, UI_SET_RELBIT, getKey());
     }
 
 
