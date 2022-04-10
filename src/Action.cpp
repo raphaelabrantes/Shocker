@@ -81,16 +81,8 @@ namespace Actions {
         delete _thread;
     }
 
-    Macro::Macro(std::string &command,
-                 const nlohmann::json &keyMaps) : Action(command) {
-        std::string delimiter = "+";
-        size_t pos = 0;
-        while ((pos = command.find(delimiter)) != std::string::npos) {
-            std::string token = command.substr(0, pos);
-            command.erase(0, pos + delimiter.length());
-            _actionVector.push_back(new Actions::Button(keyMaps.at(token)));
-        }
-        _actionVector.push_back(new Actions::Button(keyMaps.at(command)));
+    Macro::Macro(std::vector<Actions::Action *> actionVector) :
+            _actionVector(std::move(actionVector)), Action("") {
     }
 
     void Macro::activate(int16_t) {
