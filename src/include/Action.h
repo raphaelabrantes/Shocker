@@ -80,8 +80,7 @@ namespace Actions {
 
     class Macro : public Action {
     public:
-        Macro(std::string &command,
-              const nlohmann::json &keyMaps);
+        Macro(std::vector<Actions::Action *> actionVector);
 
         void activate(int16_t);
 

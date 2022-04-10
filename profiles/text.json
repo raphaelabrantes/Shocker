@@ -105,6 +105,39 @@
   },
   "PS": {
     "type": "macro",
-    "value": "E+C+H+O+SPACE+O+I+SPACE+G+A+T+I+N+H+A+ENTER"
+    "value": [
+      {
+        "type": "button",
+        "value": "E"
+      },
+      {
+        "type": "button",
+        "value": "C"
+      },
+      {
+        "type": "button",
+        "value": "H"
+      },
+      {
+        "type": "button",
+        "value": "O"
+      },
+      {
+        "type": "button",
+        "value": "SPACE"
+      },
+      {
+        "type": "button",
+        "value": "G"
+      },
+      {
+        "type": "button",
+        "value": "A"
+      },
+      {
+        "type": "button",
+        "value": "ENTER"
+      }
+    ]
   }
 }

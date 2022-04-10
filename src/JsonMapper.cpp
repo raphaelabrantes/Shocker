@@ -36,17 +36,24 @@ nlohmann::json JsonMapper::createJsonFromFile(const std::string &filePath) {
 
 Actions::Action *JsonMapper::createActions(nlohmann::json &json, const nlohmann::json &keymap) {
     auto type = json["type"].get<std::string>();
-    auto value = json["value"].get<std::string>();
     if (type == "command") {
+        auto value = json["value"].get<std::string>();
         return new Actions::Command(value);
     } else if (type == "button") {
+        auto value = json["value"].get<std::string>();
         return new Actions::Button(keymap.at(value).get<int>());
     } else if (type == "mouse") {
+        auto value = json["value"].get<std::string>();
         auto sensibility = json["sensibility"].get<int>();
         auto positive = json["positive"].get<bool>();
         return new Actions::Mouse(keymap.at(value).get<int>(), sensibility, positive);
     } else if (type == "macro") {
-        return new Actions::Macro(value, keymap);
+        auto value = json["value"].get<nlohmann::json>();
+        std::vector<Actions::Action *> macroVec;
+        for (auto it: value) {
+            macroVec.push_back(createActions(it, keymap));
+        }
+        return new Actions::Macro(macroVec);
     }
     std::cout << "Type of action not implemented " << json << std::endl;
     assert(false);
