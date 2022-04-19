@@ -2,9 +2,7 @@
 // Created by godofall on 07/11/2021.
 //
 
-#ifndef DUALSHOCKER_EVENTMANAGER_H
-#define DUALSHOCKER_EVENTMANAGER_H
-
+#pragma once
 #include <functional>
 #include <ControllerInputReader.h>
 #include <nlohmann/json.hpp>
@@ -39,5 +37,3 @@ namespace EventManager {
         void dealWithButtons(js_event *event) const;
     };
 }
-
-#endif //DUALSHOCKER_EVENTMANAGER_H

@@ -2,9 +2,7 @@
 // Created by godofall on 18/12/2021.
 //
 
-#ifndef DUALSHOCKER_EVENTCONVERTER_H
-#define DUALSHOCKER_EVENTCONVERTER_H
-
+#pragma once
 #include <linux/joystick.h>
 #include <unordered_map>
 #include <Action.h>
@@ -23,7 +21,7 @@ public:
         } else _eventValue = 0;
     }
 
-    ~EventClassifier() {};
+    ~EventClassifier() = default;
 
     bool operator==(const EventClassifier &other) const {
         return other.getType() == _eventType && other.getNumber() == _eventNumber && other.getValue() == _eventValue;
@@ -69,4 +67,3 @@ private:
     std::unordered_map<EventClassifier, std::string> _eventsNameMap;
 };
 
-#endif //DUALSHOCKER_EVENTCONVERTER_H

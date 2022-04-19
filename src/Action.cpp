@@ -94,7 +94,7 @@ namespace Actions {
 
     }
 
-    std::vector<Actions::Action *> Macro::getActions() {
+    std::vector<Actions::Action *> Macro::getActions() const {
         return _actionVector;
     }
 
