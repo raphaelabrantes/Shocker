@@ -17,7 +17,7 @@ namespace Controller{
        close(file);
     }
 
-    void  ControllerInputReader::getEvent(js_event *event) {
+    void ControllerInputReader::getEvent(js_event *event) const{
         ssize_t bytes;
         while ((bytes = read(file, event, sizeof(*event))) > 0) {
             if(event->type < JS_EVENT_INIT){

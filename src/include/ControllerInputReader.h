@@ -2,8 +2,7 @@
 // Created by godofall on 06/11/2021.
 //
 
-#ifndef DUALSHOCKER_CONTROLLERINPUTREADER_H
-#define DUALSHOCKER_CONTROLLERINPUTREADER_H
+#pragma once
 #include <linux/joystick.h>
 #include <fcntl.h>
 #include <thread>
@@ -16,12 +15,11 @@ namespace Controller {
 
     class ControllerInputReader {
     public:
-        ControllerInputReader(std::string& filename);
+        explicit ControllerInputReader(std::string& filename);
         ~ControllerInputReader();
-        void getEvent(js_event *event);
+        void getEvent(js_event *event) const;
     private:
         int file;
 
     };
 }
-#endif //DUALSHOCKER_CONTROLLERINPUTREADER_H
