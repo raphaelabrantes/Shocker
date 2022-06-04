@@ -12,18 +12,4 @@ add_library(Shocker
         EventManager.cpp
         JsonMapper.cpp
         )
-
-set_target_properties(Shocker
-        PROPERTIES
-        VERSION ${PROJECT_VERSION}
-        PUBLIC_HEADER "include/Action.h;include/ControllerInputReader.h;include/EventConverter.h;include/EventManager.h;include/JsonMapper.h;"
-        )
 target_include_directories(Shocker PUBLIC include)
-install(TARGETS Shocker
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        )
-
-
-install(FILES include/nlohmann/json.hpp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nlohmann/
-        )
