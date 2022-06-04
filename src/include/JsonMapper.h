@@ -2,9 +2,7 @@
 // Created by godofall on 13/12/2021.
 //
 
-#ifndef DUALSHOCKER_JSONMAPPER_H
-#define DUALSHOCKER_JSONMAPPER_H
-
+#pragma once
 #include <nlohmann/json.hpp>
 #include <unordered_map>
 #include <Action.h>
@@ -18,4 +16,4 @@ private:
     static Actions::Action *createActions(nlohmann::json &json, const nlohmann::json &keymap);
 };
 
-#endif //DUALSHOCKER_JSONMAPPER_H
+

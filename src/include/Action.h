@@ -2,8 +2,7 @@
 // Created by godofall on 12/12/2021.
 //
 
-#ifndef DUALSHOCKER_ACTIONS_H
-#define DUALSHOCKER_ACTIONS_H
+#pragma once
 
 #include <string>
 #include <linux/uinput.h>
@@ -13,11 +12,16 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
+#ifdef emit
+#undef emit
+#define EMIT_DEFINED
+#endif
+
 namespace Actions {
     class Action {
 
     public:
-        Action(std::string command);
+        explicit Action(std::string command);
 
         virtual void activate(int16_t value) = 0;
 
@@ -33,32 +37,23 @@ namespace Actions {
 
     class Button : public Action {
     public:
-        Button(int key);
+        explicit Button(int key);
 
-        void activate(int16_t);
+        void activate(int16_t) override;
 
-        void deactivate();
+        void deactivate() override;
 
         int getKey() const;
 
-        void initiate(int fd);
+        void initiate(int fd) override;
 
     protected:
-#ifdef emit
-#undef emit
         void emit();
-#define emit
-#else
-
-        void emit();
-
-#endif
 
         void sync();
 
         input_event _inputEvent;
 
-    protected:
         int _fd;
 
     private:
@@ -68,15 +63,15 @@ namespace Actions {
 
     class Command : public Action {
     public:
-        Command(std::string &command);
+        explicit Command(std::string &command);
 
         ~Command();
 
-        void activate(int16_t);
+        void activate(int16_t) override;
 
-        void deactivate();
+        void deactivate() override;
 
-        void initiate(int) {};
+        void initiate(int) override {};
 
     private:
         std::atomic<bool> _done;
@@ -87,15 +82,15 @@ namespace Actions {
 
     class Macro : public Action {
     public:
-        Macro(std::vector<Actions::Action *> actionVector);
+        explicit Macro(std::vector<Actions::Action *> actionVector);
 
-        void activate(int16_t);
+        void activate(int16_t) override;
 
-        void deactivate();
+        void deactivate() override;
 
-        std::vector<Action *> getActions();
+        std::vector<Action *> getActions() const;
 
-        void initiate(int fd);
+        void initiate(int fd) override;
 
     private:
 
@@ -106,11 +101,11 @@ namespace Actions {
     public:
         Mouse(int key, int sensibility, bool isPositive);
 
-        void activate(int16_t value);
+        void activate(int16_t value) override;
 
-        void deactivate();
+        void deactivate() override;
 
-        void initiate(int fd);
+        void initiate(int fd) override;
 
     private:
 
@@ -123,4 +118,7 @@ namespace Actions {
         std::atomic<int16_t> _value{0};
     };
 }
-#endif //DUALSHOCKER_ACTIONS_H
+#ifdef EMIT_DEFINED
+#define emit
+#undef EMIT_DEFINED
+#endif
