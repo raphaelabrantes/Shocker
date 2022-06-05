@@ -1,9 +1,10 @@
-//
-// Created by godofall on 12/12/2021.
-//
+// Copyright (c)  2021-2022.  Raphael Prandini Thomé de Abrantes
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
 #include <Action.h>
-#include <utility>
 #include <unistd.h>
+#include <utility>
 #include <iostream>
 
 
@@ -59,7 +60,9 @@ namespace Actions {
         ioctl(_fd, UI_SET_KEYBIT, _key);
     }
 
-    Command::Command(std::string &command) : Action(std::move(command)), _done(true) {}
+    Command::Command(std::string &command) : Action(
+            std::move(command)),
+            _done(true) {}
 
     void Command::activate(int16_t) {
         if (_done) {
@@ -87,23 +90,19 @@ namespace Actions {
     }
 
     void Macro::activate(int16_t) {
-        for (auto it: _actionVector) {
+        for (auto it : _actionVector) {
             it->activate(1);
             it->deactivate();
         }
-
     }
 
     std::vector<Actions::Action *> Macro::getActions() const {
         return _actionVector;
     }
 
-    void Macro::deactivate() {
-
-    }
 
     void Macro::initiate(int fd) {
-        for (auto action: _actionVector) {
+        for (auto action : _actionVector) {
             action->initiate(fd);
         }
     }
@@ -146,4 +145,4 @@ namespace Actions {
     }
 
 
-}
+}  // namespace Actions

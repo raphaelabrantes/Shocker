@@ -1,10 +1,12 @@
-//
-// Created by godofall on 18/12/2021.
-//
+// Copyright (c)  2021-2022.  Raphael Prandini Thomé de Abrantes
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
 #include <EventConverter.h>
 
 
-EventConverter::EventConverter(std::unordered_map<std::string, Actions::Action *> &eventEventClassifierMap)
+EventConverter::EventConverter(std::unordered_map<std::string,
+                               Actions::Action *> &eventEventClassifierMap)
         : _eventEventClassifierMap(eventEventClassifierMap) {
     _eventsNameMap[EventClassifier(1, 0)] = "X";
     _eventsNameMap[EventClassifier(1, 1)] = "CIRCLE";
@@ -35,7 +37,6 @@ EventConverter::EventConverter(std::unordered_map<std::string, Actions::Action *
     _eventsNameMap[EventClassifier(2, 6, 3)] = "LEFT_BR";
     _eventsNameMap[EventClassifier(2, 7, -1)] = "LEFT_BU";
     _eventsNameMap[EventClassifier(2, 7, 3)] = "LEFT_BD";
-
 }
 
 Actions::Action *EventConverter::convert(js_event *event) const {

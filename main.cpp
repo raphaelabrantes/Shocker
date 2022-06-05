@@ -1,6 +1,7 @@
-//
-// Created by godofall on 06/11/2021.
-//
+// Copyright (c)  2021-2022.  Raphael Prandini Thomé de Abrantes
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
 #include <iostream>
 #include <JsonMapper.h>
 #include <ControllerInputReader.h>
@@ -16,6 +17,8 @@ int main(int argc, char *argv[]) {
     auto keybinding = JsonMapper::createMapping(profileFile);
     Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
     EventConverter eventConverter(keybinding);
-    EventManager::EventManager eventManager(controllerInputReader, eventConverter, keybinding);
+    EventManager::EventManager eventManager(controllerInputReader,
+                                            eventConverter,
+                                            keybinding);
     eventManager.start();
 }

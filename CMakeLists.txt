@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(DualShocker C CXX)
 # add the executable
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -pthread")
+set(CMAKE_CXX_CPPLINT "cpplint")
 add_subdirectory(src)
 add_executable(NewShocker
         main.cpp
