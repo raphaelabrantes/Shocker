@@ -1,19 +1,23 @@
-//
-// Created by godofall on 13/12/2021.
-//
+// Copyright (c)  2021-2022.  Raphael Prandini Thomé de Abrantes
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
 
 #pragma once
-#include <nlohmann/json.hpp>
 #include <unordered_map>
+#include <string>
+#include <nlohmann/json.hpp>
 #include <Action.h>
 
 class JsonMapper {
-public:
-    static std::unordered_map<std::string, Actions::Action *> createMapping(const std::string &profile);
-private:
+ public:
+    static std::unordered_map<std::string, Actions::Action *> createMapping(
+            const std::string &profile);
+ private:
     static nlohmann::json createJsonFromFile(const std::string &filePath);
 
-    static Actions::Action *createActions(nlohmann::json &json, const nlohmann::json &keymap);
+    static Actions::Action *createActions(const nlohmann::json &json,
+                                          const nlohmann::json &keymap);
 };
 
 
