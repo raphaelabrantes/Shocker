@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
-    const std::string configPath = getenv("configPath") + std::string("/.shocker/");
+    const std::string configPath = getenv("HOME") + std::string("/.shocker/");
     std::string profileFile(configPath + "profiles/default.json");
     if (argc < 1) {
         profileFile.assign(argv[1]);
