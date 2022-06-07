@@ -12,8 +12,8 @@
     "value": "LEFTALT"
   },
   "X": {
-    "type": "command",
-    "value": "firefox https://abrantes.dev"
+    "type": "button",
+    "value": "BTN_LEFT"
   },
   "L1": {
     "type": "button",
@@ -50,25 +50,25 @@
   "R3_MU": {
     "type": "mouse",
     "value": "MOUSE_Y",
-    "sensibility": 50,
+    "sensibility": 30,
     "positive": false
   },
   "R3_MR": {
     "type": "mouse",
     "value": "MOUSE_X",
-    "sensibility": 50,
+    "sensibility": 30,
     "positive": true
   },
   "R3_ML": {
     "type": "mouse",
     "value": "MOUSE_X",
-    "sensibility": 50,
+    "sensibility": 30,
     "positive": false
   },
   "R3_MD": {
     "type": "mouse",
     "value": "MOUSE_Y",
-    "sensibility": 50,
+    "sensibility": 30,
     "positive": true
   },
   "L3_MU": {

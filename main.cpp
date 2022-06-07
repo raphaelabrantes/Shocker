@@ -9,12 +9,13 @@
 
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
-    std::string profileFile("profiles/text.json");
+    const std::string configPath = getenv("configPath") + std::string("/.shocker/");
+    std::string profileFile(configPath + "profiles/default.json");
     if (argc < 1) {
         profileFile.assign(argv[1]);
     }
 
-    auto keybinding = JsonMapper::createMapping(profileFile);
+    auto keybinding = JsonMapper::createMapping(profileFile, configPath);
     Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
     EventConverter eventConverter(keybinding);
     EventManager::EventManager eventManager(controllerInputReader,
