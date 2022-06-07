@@ -12,7 +12,7 @@
 class JsonMapper {
  public:
     static std::unordered_map<std::string, Actions::Action *> createMapping(
-            const std::string &profile);
+            const std::string &profile, const std::string &configPath);
  private:
     static nlohmann::json createJsonFromFile(const std::string &filePath);
 
