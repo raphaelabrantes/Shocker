@@ -57,7 +57,7 @@ $ NewShocker
 ```
 
 The default profile is in this
-path [`$HOME/.shocker/profiles/default.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json), if you want to
+path [`$HOME/.config/shocker/profiles/default.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json), if you want to
 run with another profile just run
 
 ```bash

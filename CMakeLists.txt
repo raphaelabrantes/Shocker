@@ -10,5 +10,5 @@ add_executable(NewShocker
         )
 target_link_libraries(NewShocker Shocker)
 target_compile_options(NewShocker PRIVATE -Wall -Wextra -Wpedantic -Werror)
-install(DIRECTORY key_codes profiles DESTINATION $ENV{HOME}/.shocker)
+install(DIRECTORY key_codes profiles DESTINATION $ENV{HOME}/.config/shocker/)
 install(TARGETS NewShocker RUNTIME)
