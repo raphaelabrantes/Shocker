@@ -46,19 +46,22 @@ $ cmake --build .
 ```
 
 ## Running
-
+First you need to install
+```bash
+$  sudo cmake --install .
+```
 To run simple execute the command
 
 ```bash
-$ ./NewShocker 
+$ NewShocker 
 ```
 
 The default profile is in this
-path [`profiles/text.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json), if you want to
+path [`$HOME/.shocker/profiles/default.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json), if you want to
 run with another profile just run
 
 ```bash
-$ ./NewShocker <path/to/new/profile/file>
+$ NewShocker <path/to/new/profile/file>
 ```
 
 You can and should modify the default profile as what you wish.
