@@ -24,7 +24,9 @@ namespace EventManager {
 
         ~EventManager();
 
-        [[noreturn]] void start();
+        void start();
+
+        void stop() { running = false;};
 
      private:
         EventConverter _eventConverter;
@@ -32,6 +34,7 @@ namespace EventManager {
         std::unordered_map<std::string, Actions::Action *> _keyMap;
         int _fd;
         uinput_setup uinputSetup = {};
+        std::atomic_bool running = {};
 
         void dealWithTriggers(js_event *event) const;
 

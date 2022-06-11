@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=2.1
+Name=ShockerGUI
+Comment=
+Exec=ShockerGUI
+Icon=/usr/share/icons/shocker_icon.png
+Terminal=false
+Type=Application
+Categories=Utility;Development;

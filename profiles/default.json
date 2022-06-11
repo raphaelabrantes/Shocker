@@ -1,15 +1,15 @@
 {
   "SQUARE": {
     "type": "button",
-    "value": "LEFTCTRL"
+    "value": "C"
   },
   "TRIANGLE": {
     "type": "button",
-    "value": "T"
+    "value": "Z"
   },
   "CIRCLE": {
     "type": "button",
-    "value": "LEFTALT"
+    "value": "V"
   },
   "X": {
     "type": "button",
@@ -17,7 +17,7 @@
   },
   "L1": {
     "type": "button",
-    "value": "LEFTSHIFT"
+    "value": "LEFTCTRL"
   },
   "L3": {
     "type": "button",
@@ -25,11 +25,11 @@
   },
   "R1": {
     "type": "button",
-    "value": "B"
+    "value": "LEFTALT"
   },
   "R3": {
     "type": "button",
-    "value": "O"
+    "value": "TAB"
   },
   "OPT": {
     "type": "button",
@@ -41,7 +41,7 @@
   },
   "L2": {
     "type": "button",
-    "value": "H"
+    "value": "LEFTSHIFT"
   },
   "R2": {
     "type": "button",
@@ -104,53 +104,7 @@
     "value": "DOWN"
   },
   "PS": {
-    "type": "macro",
-    "value": [
-      {
-        "type": "button",
-        "value": "E"
-      },
-      {
-        "type": "button",
-        "value": "C"
-      },
-      {
-        "type": "button",
-        "value": "H"
-      },
-      {
-        "type": "button",
-        "value": "O"
-      },
-      {
-        "type": "button",
-        "value": "SPACE"
-      },
-      {
-        "type": "button",
-        "value": "G"
-      },
-      {
-        "type": "button",
-        "value": "A"
-      },
-      {
-        "type": "button",
-        "value": "ENTER"
-      },
-      {
-        "type": "macro",
-        "value": [
-          {
-            "type": "command",
-            "value": "steam"
-          }
-        ]
-      },
-      {
-        "type": "command",
-        "value": "firefox https://abrantes.dev"
-      }
-    ]
+    "type": "command",
+    "value": "firefox"
   }
 }
