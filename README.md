@@ -1,6 +1,6 @@
 # Introduction
 
-**Shocker** is a C++ 11 project made for Linux that allows you to configure
+**Shocker** ![](icon/shocker_icon.png) is a C++ 17 project made for Linux that allows you to configure
 the [DualShock 4](https://www.playstation.com/pt-br/accessories/dualshock-4-wireless-controller/)  buttons/triggers/axis
 as:
 
@@ -9,11 +9,26 @@ as:
 - Macros
 - Commands e.g. `firefox https://github.com/raphaelabrantes/Shocker`
 
-This types of inputs are called actions It probably works for other controllers but I haven't tested.
+This types of inputs are called actions.  It probably works for other controllers but I haven't tested.
+
+## Applications
+### NewShocker
+NewShocker is the terminal based application, you can only start the application and quit.
+
+### ShockerGUI
+ShockerGUI is the GUI based application using [QT-5.15](https://doc.qt.io/qt-5.15/), for now it only creates an SystemTrayIcon and with it you can:
+- Start getting the events controller events
+- Stop getting the events controller events
+- Quit the app
+
+![](stop.png)
+![](start.png)
+
+There is plans to used to it to edit or create new profiles (Not yet implemented).
 
 ## Why?
 
-If you are as lazy as I am you know there is a good motive. I wanted to be able to:
+If you are as lazy as I am you know there is a good reason. I wanted to be able to:
 
 1. Use the PS4 controller for games that don't have native support ( not perfect but it works ).
 2. Have a easier way to control stream services from afar without a janky setup.
@@ -45,15 +60,29 @@ After that to build just run the command:
 $ cmake --build .
 ```
 
+If you want to build only the NewShocker:
+```bash
+$ cmake --build . --target NewShocker
+```
+If you want to build only the ShockerGUI:
+```bash
+$ cmake --build . --target ShockerGUI
+```
+
 ## Running
 First you need to install
 ```bash
 $  sudo cmake --install .
 ```
+
 To run simple execute the command
 
 ```bash
 $ NewShocker 
+```
+or 
+```bash
+$ ShockerGUI 
 ```
 
 The default profile is in this
@@ -204,7 +233,7 @@ the [`key_codes/keys.json`](https://github.com/raphaelabrantes/Shocker/blob/mast
 the MOUSE_X and MOUSE_Y, it wont break but it wont move the mouse )**
 
 All controller buttons names can be found in here or in
-the [`profiles/text.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json) :
+the [`profiles/default.json`](https://github.com/raphaelabrantes/Shocker/blob/master/profiles/text.json) :
 
 - SQUARE
 - TRIANGLE
