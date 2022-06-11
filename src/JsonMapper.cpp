@@ -10,7 +10,8 @@
 std::unordered_map<std::string, Actions::Action *> JsonMapper::createMapping(
         const std::string &profile, const std::string &configPath) {
     const nlohmann::json &profileJson = createJsonFromFile(profile);
-    const nlohmann::json &keyMaps = createJsonFromFile(configPath + "key_codes/keys.json");
+    const nlohmann::json &keyMaps = createJsonFromFile(
+            configPath + "key_codes/keys.json");
     std::unordered_map<std::string, Actions::Action *> mapping;
 
     for (auto it = profileJson.begin(); it != profileJson.end(); ++it) {

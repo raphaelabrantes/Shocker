@@ -22,7 +22,8 @@ namespace EventManager {
         _fd = start_env(_keyMap, uinputSetup);
     }
 
-    [[noreturn]] void EventManager::start() {
+    void EventManager::start() {
+        running = true;
         auto *event = new js_event;
         do {
             _controllerInputReader.getEvent(event);
@@ -39,7 +40,7 @@ namespace EventManager {
             } else {
                 dealWithButtons(event);
             }
-        } while (true);
+        } while (running);
     }
 
     void EventManager::dealWithButtons(js_event *event) const {
@@ -77,7 +78,8 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map,
     int fd = open("/dev/uinput",
                   O_WRONLY | O_NONBLOCK);
     if (fd < 0) {
-        std::cout << "It was not possible to create the keyboard and mouse device" << std::endl;
+        std::cout << "It was not possible to"
+                     " create the keyboard and mouse device" << std::endl;
         exit(1);
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
