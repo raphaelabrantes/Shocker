@@ -6,7 +6,7 @@
 
 
 EventConverter::EventConverter(std::unordered_map<std::string,
-                               Actions::Action *> &eventEventClassifierMap)
+        Actions::Action *> &eventEventClassifierMap)
         : _eventEventClassifierMap(eventEventClassifierMap) {
     _eventsNameMap[EventClassifier(1, 0)] = "X";
     _eventsNameMap[EventClassifier(1, 1)] = "CIRCLE";

@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT.
 
 #pragma once
+
 #include <linux/uinput.h>
 #include <functional>
 #include <ControllerInputReader.h>
@@ -26,7 +27,7 @@ namespace EventManager {
 
         void start();
 
-        void stop() { running = false;};
+        void stop() { running = false; };
 
      private:
         EventConverter _eventConverter;

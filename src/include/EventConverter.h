@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT.
 
 #pragma once
+
 #include <linux/joystick.h>
 #include <unordered_map>
 #include <Action.h>

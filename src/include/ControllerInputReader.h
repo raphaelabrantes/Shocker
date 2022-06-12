@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT.
 
 #pragma once
+
 #include <linux/joystick.h>
 #include <fcntl.h>
 #include <thread>
@@ -16,9 +17,12 @@ namespace Controller {
 
     class ControllerInputReader {
     public:
-        explicit ControllerInputReader(std::string& filename);
+        explicit ControllerInputReader(std::string &filename);
+
         ~ControllerInputReader();
+
         void getEvent(js_event *event) const;
+
     private:
         int file;
 

@@ -4,18 +4,17 @@
 // https://opensource.org/licenses/MIT.
 #include <EventManager.h>
 #include <linux/uinput.h>
-#include <stdio.h>
-#include <fstream>
 #include <Action.h>
+#include <Exception.h>
 
 
 namespace EventManager {
 
     EventManager::EventManager(
             Controller::ControllerInputReader &controllerInputReader,
-                               EventConverter &eventConverter,
-                               std::unordered_map<std::string,
-                               Actions::Action *> &keyMap) :
+            EventConverter &eventConverter,
+            std::unordered_map<std::string,
+                    Actions::Action *> &keyMap) :
             _eventConverter(eventConverter),
             _controllerInputReader(controllerInputReader),
             _keyMap(keyMap) {
