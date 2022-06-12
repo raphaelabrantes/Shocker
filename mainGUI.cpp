@@ -9,13 +9,19 @@
 #include <JsonMapper.h>
 #include <ControllerInputReader.h>
 #include <EventManager.h>
+#include <Exception.h>
+#include <QMessageBox>
 
-class Window: public QWidget {
+
+class Window : public QWidget {
  public:
     explicit Window(EventManager::EventManager *eventManager);
+
  private:
     void startShocker();
+
     void stopShocker();
+
     QAction *quitAction;
     QAction *startAction;
     QAction *stopAction;
@@ -68,28 +74,33 @@ void Window::stopShocker() {
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
     const std::string configPath = getenv("HOME") +
-            std::string("/.config/shocker/");
+                                   std::string("/.config/shocker/");
 
     std::string profileFile(configPath + "profiles/default.json");
     if (argc < 1) {
         profileFile.assign(argv[1]);
     }
 
-    auto keybinding = JsonMapper::createMapping(profileFile, configPath);
-    Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
-    EventConverter eventConverter(keybinding);
-    EventManager::EventManager eventManager(controllerInputReader,
-                                            eventConverter,
-                                            keybinding);
-
     QApplication app(argc, argv);
+    try {
+        auto keybinding = JsonMapper::createMapping(profileFile, configPath);
+        Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
+        EventConverter eventConverter(keybinding);
+        EventManager::EventManager eventManager(controllerInputReader,
+                                                eventConverter,
+                                                keybinding);
 
-    Window window(&eventManager);
 
-    window.resize(250, 150);
-    window.setWindowTitle("ShockerGUI");
-    window.hide();
+        Window window(&eventManager);
 
-
-    return app.exec();
+        window.resize(250, 150);
+        window.setWindowTitle("ShockerGUI");
+        window.hide();
+        return app.exec();
+    } catch (std::exception &e) {
+        QMessageBox::critical(nullptr, QObject::tr("ShockerGUI"),
+                              QObject::tr("ShockerGUI failed with this "
+                                          "exception:\n\n") + e.what());
+        return 1;
+    }
 }

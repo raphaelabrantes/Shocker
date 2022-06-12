@@ -4,18 +4,17 @@
 // https://opensource.org/licenses/MIT.
 #include <EventManager.h>
 #include <linux/uinput.h>
-#include <stdio.h>
-#include <fstream>
 #include <Action.h>
+#include <Exception.h>
 
 
 namespace EventManager {
 
     EventManager::EventManager(
             Controller::ControllerInputReader &controllerInputReader,
-                               EventConverter &eventConverter,
-                               std::unordered_map<std::string,
-                               Actions::Action *> &keyMap) :
+            EventConverter &eventConverter,
+            std::unordered_map<std::string,
+                    Actions::Action *> &keyMap) :
             _eventConverter(eventConverter),
             _controllerInputReader(controllerInputReader),
             _keyMap(keyMap) {
@@ -80,7 +79,7 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map,
     if (fd < 0) {
         std::cout << "It was not possible to"
                      " create the keyboard and mouse device" << std::endl;
-        exit(1);
+        throw UnableToCreateVirtualDevice();
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
     ioctl(fd, UI_SET_EVBIT, EV_KEY);
