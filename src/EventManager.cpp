@@ -80,7 +80,7 @@ int start_env(const std::unordered_map<std::string, Actions::Action *> &map,
     if (fd < 0) {
         std::cout << "It was not possible to"
                      " create the keyboard and mouse device" << std::endl;
-        exit(1);
+        throw UnableToCreateVirtualDevice();
     }
     ioctl(fd, UI_SET_EVBIT, EV_REL);
     ioctl(fd, UI_SET_EVBIT, EV_KEY);

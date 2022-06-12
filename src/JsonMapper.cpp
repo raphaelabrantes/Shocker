@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 #include <JsonMapper.h>
+#include <Exception.h>
 #include <iostream>
 #include <fstream>
 
@@ -27,7 +28,7 @@ nlohmann::json JsonMapper::createJsonFromFile(const std::string &filePath) {
     std::ifstream jsonFile(filePath);
     if (!jsonFile.is_open()) {
         std::cout << "Failed to open profile file: " << filePath << std::endl;
-        exit(1);
+        throw FileNotFound(filePath);
     }
     nlohmann::json json;
     jsonFile >> json;
@@ -56,7 +57,7 @@ Actions::Action *JsonMapper::createActions(const nlohmann::json &json,
     } else if (type == "macro") {
         auto value = json["value"].get<nlohmann::json>();
         std::vector<Actions::Action *> macroVec;
-        for ( const auto& it : value ) {
+        for (const auto &it : value) {
             macroVec.push_back(createActions(it, keymap));
         }
         return new Actions::Macro(macroVec);

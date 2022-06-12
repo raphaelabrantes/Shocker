@@ -2,23 +2,24 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
-#include <fstream>
-#include "ControllerInputReader.h"
+#include <Exception.h>
+#include <ControllerInputReader.h>
+
 namespace Controller {
-    ControllerInputReader::ControllerInputReader(std::string& filename) {
+    ControllerInputReader::ControllerInputReader(std::string &filename) {
         file = open(filename.c_str(), O_RDONLY);
         if (file < 0) {
             std::cout <<
-            "Unable to open joystick file " <<
-            filename <<
-            std::endl<<
-            "Check if controller is connected." << std::endl;
-            exit(-1);
+                      "Unable to open joystick file " <<
+                      filename <<
+                      std::endl <<
+                      "Check if controller is connected." << std::endl;
+            throw DeviceNotFound(filename);
         }
     }
 
     ControllerInputReader::~ControllerInputReader() {
-       close(file);
+        close(file);
     }
 
     void ControllerInputReader::getEvent(js_event *event) const {
@@ -28,8 +29,8 @@ namespace Controller {
                 return;
             }
         }
-        std::cout << "Controller Error (disconected): " <<
-        static_cast<int>(bytes) << std::endl;
-        exit(-1);
+        std::cout << "Controller Error (disconnected): " <<
+                  static_cast<int>(bytes) << std::endl;
+        throw DeviceDisconnected();
     }
 }  // namespace Controller
