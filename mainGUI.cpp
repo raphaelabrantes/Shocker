@@ -11,44 +11,45 @@
 #include <EventManager.h>
 #include <Exception.h>
 #include <QMessageBox>
-
+#include <QVBoxLayout>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
 
 class Window : public QWidget {
  public:
-    explicit Window(EventManager::EventManager *eventManager);
+    Window(EventManager::EventManager *eventManager, const std::string& profileFile);
 
  private:
     void startShocker();
 
     void stopShocker();
 
-    QAction *quitAction;
-    QAction *startAction;
-    QAction *stopAction;
-    QSystemTrayIcon *trayIcon;
-    QMenu *trayIconMenu;
-    EventManager::EventManager *eventManager;
+    void createSystemTray();
+
+    void generateDMenu();
+
+    QAction *quitAction{};
+    QAction *startAction{};
+    QAction *stopAction{};
+    QAction *showAction{};
+    QSystemTrayIcon *trayIcon{};
+    QMenu *trayIconMenu{};
+    QLineEdit * profileEdit{};
+    EventManager::EventManager *eventManager{};
     std::thread *_thread{};
+    std::string profileFile;
+
+
 };
 
-Window::Window(EventManager::EventManager *eventManager) {
-    this->eventManager = eventManager;
-    QIcon icon(tr("/usr/share/icons/shocker_icon.png"));
-    trayIconMenu = new QMenu(this);
-
-    startAction = new QAction(tr("&Start"), this);
-    stopAction = new QAction(tr("&Stop"), this);
-    quitAction = new QAction(tr("&Quit"), this);
-
-    connect(startAction, &QAction::triggered, this, &Window::startShocker);
-    connect(stopAction, &QAction::triggered, this, &Window::stopShocker);
-    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
-
-    trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setIcon(icon);
-    setWindowIcon(icon);
-    trayIcon->show();
+Window::Window(EventManager::EventManager *eventManager, const std::string& profileFile) :
+        trayIcon(new QSystemTrayIcon(this)),
+        trayIconMenu(new QMenu(this)),
+        eventManager(eventManager),
+        profileFile(profileFile){
+    createSystemTray();
+    generateDMenu();
     startShocker();
 }
 
@@ -57,18 +58,49 @@ void Window::startShocker() {
             &EventManager::EventManager::start,
             this->eventManager);
     _thread->detach();
+    trayIconMenu->insertAction(startAction, stopAction);
     trayIconMenu->removeAction(startAction);
-    trayIconMenu->removeAction(quitAction);
-    trayIconMenu->addAction(stopAction);
-    trayIconMenu->addAction(quitAction);
 }
 
 void Window::stopShocker() {
     eventManager->stop();
+    trayIconMenu->insertAction(stopAction, startAction);
     trayIconMenu->removeAction(stopAction);
-    trayIconMenu->removeAction(quitAction);
+}
+
+void Window::createSystemTray() {
+    QIcon icon(tr("/usr/share/icons/shocker_icon.png"));
+    setWindowIcon(icon);
+
+    startAction = new QAction(tr("&Start"), this);
+    stopAction = new QAction(tr("&Stop"), this);
+    quitAction = new QAction(tr("&Quit"), this);
+    showAction = new QAction(tr("&Show Window"), this);
+
+    connect(startAction, &QAction::triggered, this, &Window::startShocker);
+    connect(stopAction, &QAction::triggered, this, &Window::stopShocker);
+    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    connect(showAction, &QAction::triggered, this, &Window::show);
+
+    trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->setIcon(icon);
+    trayIcon->show();
     trayIconMenu->addAction(startAction);
+    trayIconMenu->addAction(showAction);
+    trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
+}
+
+void Window::generateDMenu() {
+    auto * vbox = new QHBoxLayout();
+    auto * hbox = new QVBoxLayout();
+    profileEdit = new QLineEdit(profileFile.c_str());
+    auto *loadButton =  new QPushButton("Load Profile");
+    vbox->addWidget(profileEdit);
+    vbox->addSpacing(10);
+    vbox->addWidget(loadButton);
+    hbox->addItem(vbox);
+    setLayout(hbox);
 }
 
 int main(int argc, char *argv[]) {
@@ -91,9 +123,9 @@ int main(int argc, char *argv[]) {
                                                 keybinding);
 
 
-        Window window(&eventManager);
+        Window window(&eventManager, profileFile);
 
-        window.resize(250, 150);
+        window.resize(500, 150);
         window.setWindowTitle("ShockerGUI");
         window.hide();
         return app.exec();
