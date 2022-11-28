@@ -1,30 +1,30 @@
 // Copyright (c)  2021-2022.  Raphael Prandini Thomé de Abrantes
 // Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
+// license that can be found in the LICENSE jsStream or at
 // https://opensource.org/licenses/MIT.
 #include <Exception.h>
 #include <ControllerInputReader.h>
 
 namespace Controller {
-    ControllerInputReader::ControllerInputReader(std::string &filename) {
-        file = open(filename.c_str(), O_RDONLY);
-        if (file < 0) {
+    ControllerInputReader::ControllerInputReader(std::string &jsStreamname) {
+        jsStream.open(jsStreamname, std::fstream::in | std::fstream::binary);
+        if (!jsStream.is_open()) {
             std::cout <<
-                      "Unable to open joystick file " <<
-                      filename <<
+                      "Unable to open joystick jsStream " <<
+                      jsStreamname <<
                       std::endl <<
                       "Check if controller is connected." << std::endl;
-            throw DeviceNotFound(filename);
+            throw DeviceNotFound(jsStreamname);
         }
     }
 
     ControllerInputReader::~ControllerInputReader() {
-        close(file);
+        jsStream.close();
     }
 
-    void ControllerInputReader::getEvent(js_event *event) const {
+    void ControllerInputReader::getEvent(js_event *event)  {
         ssize_t bytes;
-        while ((bytes = read(file, event, sizeof(*event))) > 0) {
+        while (jsStream.read((char *) event, sizeof(js_event))) {
             if (event->type < JS_EVENT_INIT) {
                 return;
             }

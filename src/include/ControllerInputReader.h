@@ -6,13 +6,8 @@
 #pragma once
 
 #include <linux/joystick.h>
-#include <fcntl.h>
-#include <thread>
-#include <unistd.h>
-#include <iostream>
 #include <string>
-#include <mutex>
-
+#include <fstream>
 namespace Controller {
 
     class ControllerInputReader {
@@ -21,10 +16,10 @@ namespace Controller {
 
         ~ControllerInputReader();
 
-        void getEvent(js_event *event) const;
+        void getEvent(js_event *event);
 
     private:
-        int file;
+        std::ifstream jsStream;
 
     };
 }
