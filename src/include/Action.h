@@ -7,12 +7,8 @@
 
 #include <string>
 #include <linux/uinput.h>
-#include <thread>
 #include <atomic>
-#include <unordered_map>
 #include <vector>
-#include <nlohmann/json.hpp>
-
 #ifdef emit
 #undef emit
 #define EMIT_DEFINED
@@ -112,7 +108,6 @@ namespace Actions {
 
         int _sensibility;
         bool _isPositive;
-        std::thread *_mouseThread = nullptr;
         std::atomic<bool> _isPressed{false};
         std::atomic<int16_t> _value{0};
     };

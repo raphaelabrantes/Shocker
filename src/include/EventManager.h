@@ -6,7 +6,6 @@
 #pragma once
 
 #include <linux/uinput.h>
-#include <functional>
 #include <ControllerInputReader.h>
 #include <nlohmann/json.hpp>
 #include <Action.h>
@@ -31,7 +30,7 @@ namespace EventManager {
 
      private:
         EventConverter _eventConverter;
-        Controller::ControllerInputReader _controllerInputReader;
+        Controller::ControllerInputReader *_controllerInputReader;
         std::unordered_map<std::string, Actions::Action *> _keyMap;
         int _fd;
         uinput_setup uinputSetup = {};

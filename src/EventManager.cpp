@@ -6,6 +6,8 @@
 #include <linux/uinput.h>
 #include <Action.h>
 #include <Exception.h>
+#include <fcntl.h>
+#include <csignal>
 
 
 namespace EventManager {
@@ -16,7 +18,7 @@ namespace EventManager {
             std::unordered_map<std::string,
                     Actions::Action *> &keyMap) :
             _eventConverter(eventConverter),
-            _controllerInputReader(controllerInputReader),
+            _controllerInputReader(&controllerInputReader),
             _keyMap(keyMap) {
         _fd = start_env(_keyMap, uinputSetup);
     }
@@ -25,7 +27,7 @@ namespace EventManager {
         running = true;
         auto *event = new js_event;
         do {
-            _controllerInputReader.getEvent(event);
+            _controllerInputReader->getEvent(event);
 #ifdef DEGUB
             std::cout << "TYPE: " <<
             static_cast<int>(event->type) <<
