@@ -76,8 +76,6 @@ namespace Actions {
 
     private:
         std::atomic<bool> _done;
-        std::thread *_thread = nullptr;
-
         void start();
     };
 

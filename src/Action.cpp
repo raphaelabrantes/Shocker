@@ -66,9 +66,8 @@ namespace Actions {
 
     void Command::activate(int16_t) {
         if (_done) {
-            delete _thread;
-            _thread = new std::thread(&Command::start, this);
-            _thread->detach();
+            std::thread thread(&Command::start, this);
+            thread.detach();
         }
     }
 
@@ -82,7 +81,6 @@ namespace Actions {
     }
 
     Command::~Command() {
-        delete _thread;
     }
 
     Macro::Macro(std::vector<Actions::Action *> actionVector) :
@@ -117,9 +115,8 @@ namespace Actions {
         _value = value;
         if (!_isPressed) {
             _isPressed = true;
-            delete _mouseThread;
-            _mouseThread = new std::thread(&Mouse::start, this);
-            _mouseThread->detach();
+            std::thread mouseThread(&Mouse::start, this);
+            mouseThread.detach();
         }
     }
 
