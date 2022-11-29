@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT.
 
 #pragma once
-
+#include <memory>
 #include <linux/uinput.h>
 #include <ControllerInputReader.h>
 #include <nlohmann/json.hpp>
@@ -12,7 +12,8 @@
 #include <EventConverter.h>
 
 
-int start_env(const std::unordered_map<std::string, Actions::Action *> &map, uinput_setup &setup);
+
+int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Action>>& map, uinput_setup &setup);
 
 
 namespace EventManager {

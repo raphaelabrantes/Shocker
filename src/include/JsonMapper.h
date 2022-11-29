@@ -12,13 +12,13 @@
 
 class JsonMapper {
  public:
-    static std::unordered_map<std::string, Actions::Action *> createMapping(
+    static std::unordered_map<std::string, std::shared_ptr<Actions::Action>> createMapping(
             const std::string &profile, const std::string &configPath);
 
  private:
     static nlohmann::json createJsonFromFile(const std::string &filePath);
 
-    static Actions::Action *createActions(const nlohmann::json &json,
+    static std::shared_ptr<Actions::Action> createActions(const nlohmann::json &json,
                                           const nlohmann::json &keymap);
 };
 

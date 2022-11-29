@@ -80,27 +80,25 @@ namespace Actions {
         _done = true;
     }
 
-    Command::~Command() {
-    }
 
-    Macro::Macro(std::vector<Actions::Action *> actionVector) :
+    Macro::Macro(std::vector<std::shared_ptr<Actions::Action>> actionVector) :
             _actionVector(std::move(actionVector)), Action("") {
     }
 
+    Macro::~Macro(){
+        _actionVector.clear();
+    }
+
     void Macro::activate(int16_t) {
-        for (auto it : _actionVector) {
+        for (auto const &it : _actionVector) {
             it->activate(1);
             it->deactivate();
         }
     }
 
-    std::vector<Actions::Action *> Macro::getActions() const {
-        return _actionVector;
-    }
-
 
     void Macro::initiate(int fd) {
-        for (auto action : _actionVector) {
+        for (auto const &action : _actionVector) {
             action->initiate(fd);
         }
     }

@@ -60,12 +60,11 @@ namespace std {
 
 class EventConverter {
 public:
-    explicit EventConverter(std::unordered_map<std::string, Actions::Action *> &eventEventClassifierMap);
-
+    explicit EventConverter(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap);
     Actions::Action *convert(js_event *event) const;
 
 private:
-    std::unordered_map<std::string, Actions::Action *> _eventEventClassifierMap;
+    std::unordered_map<std::string, std::shared_ptr<Actions::Action>> _actionKeyBindindMap;
     std::unordered_map<EventClassifier, std::string> _eventsNameMap;
 };
 

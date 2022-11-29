@@ -9,6 +9,7 @@
 #include <linux/uinput.h>
 #include <atomic>
 #include <vector>
+#include <memory>
 #ifdef emit
 #undef emit
 #define EMIT_DEFINED
@@ -40,7 +41,7 @@ namespace Actions {
 
         void deactivate() override;
 
-        int getKey() const;
+        [[nodiscard]] int getKey() const;
 
         void initiate(int fd) override;
 
@@ -62,8 +63,6 @@ namespace Actions {
     public:
         explicit Command(std::string &command);
 
-        ~Command();
-
         void activate(int16_t) override;
 
         void deactivate() override;
@@ -77,19 +76,18 @@ namespace Actions {
 
     class Macro : public Action {
     public:
-        explicit Macro(std::vector<Actions::Action *> actionVector);
+        explicit Macro(std::vector<std::shared_ptr<Actions::Action>> actionVector);
 
         void activate(int16_t) override;
 
         void deactivate() override {};
 
-        std::vector<Action *> getActions() const;
-
         void initiate(int fd) override;
 
-    private:
+        ~Macro();
 
-        std::vector<Actions::Action *> _actionVector;
+    private:
+        std::vector<std::shared_ptr<Actions::Action>> _actionVector;
     };
 
     class Mouse : public Button {

@@ -4,10 +4,9 @@
 // https://opensource.org/licenses/MIT.
 #include <EventManager.h>
 #include <linux/uinput.h>
-#include <Action.h>
-#include <Exception.h>
 #include <fcntl.h>
-
+#include <Exception.h>
+#include <Action.h>
 
 namespace EventManager {
 
@@ -65,7 +64,7 @@ namespace EventManager {
 
 }  // namespace EventManager
 
-int start_env(const std::unordered_map<std::string, Actions::Action *> &map,
+int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Action>>& map,
               uinput_setup &uinputSetup) {
     int fd = open("/dev/uinput",
                   O_WRONLY | O_NONBLOCK);

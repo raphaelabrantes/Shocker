@@ -5,9 +5,8 @@
 #include <EventConverter.h>
 
 
-EventConverter::EventConverter(std::unordered_map<std::string,
-        Actions::Action *> &eventEventClassifierMap)
-        : _eventEventClassifierMap(eventEventClassifierMap) {
+EventConverter::EventConverter(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap)
+        : _actionKeyBindindMap(std::move(actionKeyBindindMap)) {
     _eventsNameMap[EventClassifier(1, 0)] = "X";
     _eventsNameMap[EventClassifier(1, 1)] = "CIRCLE";
     _eventsNameMap[EventClassifier(1, 2)] = "TRIANGLE";
@@ -41,5 +40,5 @@ EventConverter::EventConverter(std::unordered_map<std::string,
 
 Actions::Action *EventConverter::convert(js_event *event) const {
     EventClassifier eventClassifier(event->type, event->number, event->value);
-    return _eventEventClassifierMap.at(_eventsNameMap.at(eventClassifier));
+    return _actionKeyBindindMap.at(_eventsNameMap.at(eventClassifier)).get();
 }
