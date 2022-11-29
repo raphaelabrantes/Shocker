@@ -4,6 +4,9 @@ project(DualShocker C CXX)
 # add the executable
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -pthread")
 set(CMAKE_CXX_CPPLINT "cpplint")
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_compile_definitions(DEBUG)
+endif ()
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 add_subdirectory(src)
 add_executable(NewShocker
@@ -13,7 +16,6 @@ add_executable(ShockerGUI mainGUI.cpp)
 
 target_link_libraries(NewShocker Shocker)
 target_link_libraries(ShockerGUI Shocker Qt5::Widgets)
-
 
 target_compile_options(NewShocker  PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_compile_options(ShockerGUI PRIVATE -Wall -Wextra -Wpedantic -Werror)

@@ -7,20 +7,15 @@
 #include <Action.h>
 #include <Exception.h>
 #include <fcntl.h>
-#include <csignal>
 
 
 namespace EventManager {
 
     EventManager::EventManager(
             Controller::ControllerInputReader &controllerInputReader,
-            EventConverter &eventConverter,
-            std::unordered_map<std::string,
-                    Actions::Action *> &keyMap) :
+            EventConverter &eventConverter) :
             _eventConverter(eventConverter),
-            _controllerInputReader(&controllerInputReader),
-            _keyMap(keyMap) {
-        _fd = start_env(_keyMap, uinputSetup);
+            _controllerInputReader(&controllerInputReader) {
     }
 
     void EventManager::start() {
@@ -28,7 +23,7 @@ namespace EventManager {
         auto *event = new js_event;
         do {
             _controllerInputReader->getEvent(event);
-#ifdef DEGUB
+#ifdef DEBUG
             std::cout << "TYPE: " <<
             static_cast<int>(event->type) <<
             " KEY: " <<
@@ -68,10 +63,6 @@ namespace EventManager {
         }
     }
 
-    EventManager::~EventManager() {
-        ioctl(_fd, UI_DEV_DESTROY);
-        close(_fd);
-    }
 }  // namespace EventManager
 
 int start_env(const std::unordered_map<std::string, Actions::Action *> &map,

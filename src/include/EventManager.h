@@ -19,11 +19,7 @@ namespace EventManager {
     class EventManager {
      public:
         EventManager(Controller::ControllerInputReader &controllerInputReader,
-                     EventConverter &eventConverter,
-                     std::unordered_map<std::string, Actions::Action *> &keyMap);
-
-        ~EventManager();
-
+                     EventConverter &eventConverter);
         void start();
 
         void stop() { running = false; };
@@ -31,9 +27,6 @@ namespace EventManager {
      private:
         EventConverter _eventConverter;
         Controller::ControllerInputReader *_controllerInputReader;
-        std::unordered_map<std::string, Actions::Action *> _keyMap;
-        int _fd;
-        uinput_setup uinputSetup = {};
         std::atomic_bool running = {};
 
         void dealWithTriggers(js_event *event) const;
