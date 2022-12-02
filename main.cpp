@@ -6,7 +6,6 @@
 #include <JsonMapper.h>
 #include <ControllerInputReader.h>
 #include <EventManager.h>
-#include <memory>
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
     const std::string configPath = getenv("HOME") +

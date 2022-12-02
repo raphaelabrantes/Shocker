@@ -42,3 +42,13 @@ Actions::Action *EventConverter::convert(js_event *event) const {
     EventClassifier eventClassifier(event->type, event->number, event->value);
     return _actionKeyBindindMap.at(_eventsNameMap.at(eventClassifier)).get();
 }
+
+void EventConverter::setActionKeyBindingMap(
+        std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap) {
+    for(auto &it : _actionKeyBindindMap){
+        it.second->deactivate();
+    }
+    _actionKeyBindindMap.clear();
+    _actionKeyBindindMap.swap(actionKeyBindindMap);
+
+}

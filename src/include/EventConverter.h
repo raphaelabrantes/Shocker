@@ -62,6 +62,7 @@ class EventConverter {
 public:
     explicit EventConverter(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap);
     Actions::Action *convert(js_event *event) const;
+    void setActionKeyBindingMap(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap);
 
 private:
     std::unordered_map<std::string, std::shared_ptr<Actions::Action>> _actionKeyBindindMap;

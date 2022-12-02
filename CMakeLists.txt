@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name
 project(DualShocker C CXX)
 # add the executable
-SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -pthread")
-set(CMAKE_CXX_CPPLINT "cpplint")
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -pthread")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     add_compile_definitions(DEBUG)
 endif ()

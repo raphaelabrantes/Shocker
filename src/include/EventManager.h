@@ -14,7 +14,7 @@
 
 
 int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Action>>& map, uinput_setup &setup);
-
+void stop_env(int fd);
 
 namespace EventManager {
     class EventManager {
@@ -26,8 +26,8 @@ namespace EventManager {
         void stop() { running = false; };
 
      private:
-        EventConverter _eventConverter;
-        Controller::ControllerInputReader *_controllerInputReader;
+        EventConverter* _eventConverter;
+        Controller::ControllerInputReader* _controllerInputReader;
         std::atomic_bool running = {};
 
         void dealWithTriggers(js_event *event) const;

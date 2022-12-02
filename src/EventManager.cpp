@@ -7,13 +7,14 @@
 #include <fcntl.h>
 #include <Exception.h>
 #include <Action.h>
+#include <csignal>
 
 namespace EventManager {
 
     EventManager::EventManager(
             Controller::ControllerInputReader &controllerInputReader,
             EventConverter &eventConverter) :
-            _eventConverter(eventConverter),
+            _eventConverter(&eventConverter),
             _controllerInputReader(&controllerInputReader) {
     }
 
@@ -39,7 +40,7 @@ namespace EventManager {
     }
 
     void EventManager::dealWithButtons(js_event *event) const {
-        auto action = _eventConverter.convert(event);
+        auto action = _eventConverter->convert(event);
         if (event->value) {
             action->activate(event->value);
         } else {
@@ -51,9 +52,9 @@ namespace EventManager {
         if (!(event->number == 2 || event->number == 5)) {
             if (event->value == 0) {
                 event->value = -1;
-                auto action1 = _eventConverter.convert(event);
+                auto action1 = _eventConverter->convert(event);
                 event->value = 4;
-                auto action2 = _eventConverter.convert(event);
+                auto action2 = _eventConverter->convert(event);
                 action1->deactivate();
                 action2->deactivate();
             } else {
@@ -87,4 +88,8 @@ int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Act
     ioctl(fd, UI_DEV_SETUP, &uinputSetup);
     ioctl(fd, UI_DEV_CREATE);
     return fd;
+}
+void stop_env(int fd){
+    ioctl(fd, UI_DEV_DESTROY);
+    close(fd);
 }
