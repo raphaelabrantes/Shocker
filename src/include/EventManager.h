@@ -23,7 +23,10 @@ namespace EventManager {
                      EventConverter &eventConverter);
         void start();
 
-        void stop() { running = false; };
+        void stop() {
+            running = false;
+            _eventConverter->stopAll();
+        };
 
      private:
         EventConverter* _eventConverter;

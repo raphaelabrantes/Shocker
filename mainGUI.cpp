@@ -11,6 +11,7 @@
 #include <EventManager.h>
 #include <Exception.h>
 #include <QMessageBox>
+#include <thread>
 
 
 class Window : public QWidget {
@@ -28,7 +29,6 @@ class Window : public QWidget {
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     EventManager::EventManager *eventManager;
-    std::thread *_thread{};
 };
 
 Window::Window(EventManager::EventManager *eventManager) {
@@ -53,10 +53,8 @@ Window::Window(EventManager::EventManager *eventManager) {
 }
 
 void Window::startShocker() {
-    _thread = new std::thread(
-            &EventManager::EventManager::start,
-            this->eventManager);
-    _thread->detach();
+    std::thread thread1(&EventManager::EventManager::start, eventManager);
+    thread1.detach();
     trayIconMenu->removeAction(startAction);
     trayIconMenu->removeAction(quitAction);
     trayIconMenu->addAction(stopAction);
@@ -83,14 +81,13 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
     try {
+        uinput_setup uinputSetup {};
         auto keybinding = JsonMapper::createMapping(profileFile, configPath);
+        start_env(keybinding, uinputSetup);
         Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
-        EventConverter eventConverter(keybinding);
+        EventConverter eventConverter(std::move(keybinding));
         EventManager::EventManager eventManager(controllerInputReader,
-                                                eventConverter,
-                                                keybinding);
-
-
+                                                eventConverter);
         Window window(&eventManager);
 
         window.resize(250, 150);

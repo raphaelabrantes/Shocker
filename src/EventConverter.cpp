@@ -45,10 +45,14 @@ Actions::Action *EventConverter::convert(js_event *event) const {
 
 void EventConverter::setActionKeyBindingMap(
         std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap) {
-    for(auto &it : _actionKeyBindindMap){
-        it.second->deactivate();
-    }
+    stopAll();
     _actionKeyBindindMap.clear();
     _actionKeyBindindMap.swap(actionKeyBindindMap);
 
+}
+
+void EventConverter::stopAll() {
+    for(auto &it : _actionKeyBindindMap){
+        it.second->deactivate();
+    }
 }
