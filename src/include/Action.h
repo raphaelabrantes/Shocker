@@ -30,7 +30,7 @@ namespace Actions {
         virtual void initiate(int fd) = 0;
 
     protected:
-        std::string _command;
+        std::string m_command;
     };
 
     class Button : public Action {
@@ -50,13 +50,13 @@ namespace Actions {
 
         void sync();
 
-        input_event _inputEvent;
+        input_event m_inputEvent;
 
-        int _fd;
+        int m_fd;
 
     private:
-        int _key;
-        bool _isPressed = false;
+        int m_key;
+        bool m_isPressed = false;
     };
 
     class Command : public Action {
@@ -70,7 +70,7 @@ namespace Actions {
         void initiate(int) override {};
 
     private:
-        std::atomic<bool> _done;
+        std::atomic<bool> m_done;
         void start();
     };
 
@@ -87,7 +87,7 @@ namespace Actions {
         ~Macro();
 
     private:
-        std::vector<std::shared_ptr<Actions::Action>> _actionVector;
+        std::vector<std::shared_ptr<Actions::Action>> m_actionVector;
     };
 
     class Mouse : public Button {
@@ -104,10 +104,10 @@ namespace Actions {
 
         void start();
 
-        int _sensibility;
-        bool _isPositive;
-        std::atomic<bool> _isPressed{false};
-        std::atomic<int16_t> _value{0};
+        int m_sensibility;
+        bool m_isPositive;
+        std::atomic<bool> m_isPressed{false};
+        std::atomic<int16_t> m_value{0};
     };
 }
 #ifdef EMIT_DEFINED

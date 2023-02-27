@@ -9,63 +9,63 @@
 
 
 namespace Actions {
-    Action::Action(std::string command) : _command(std::move(command)) {}
+    Action::Action(std::string command) : m_command(std::move(command)) {}
 
     std::string Action::getCommand() const {
-        return _command;
+        return m_command;
     }
 
 
-    Button::Button(int key) : Action(""), _key(key) {}
+    Button::Button(int key) : Action(""), m_key(key) {}
 
     void Button::activate(int16_t) {
-        if (!_isPressed) {
-            _inputEvent.type = EV_KEY;
-            _inputEvent.code = _key;
-            _inputEvent.value = 1;
+        if (!m_isPressed) {
+            m_inputEvent.type = EV_KEY;
+            m_inputEvent.code = m_key;
+            m_inputEvent.value = 1;
             emit();
             sync();
-            _isPressed = true;
+            m_isPressed = true;
         }
     }
 
     void Button::deactivate() {
-        if (_isPressed) {
-            _inputEvent.type = EV_KEY;
-            _inputEvent.code = _key;
-            _inputEvent.value = 0;
+        if (m_isPressed) {
+            m_inputEvent.type = EV_KEY;
+            m_inputEvent.code = m_key;
+            m_inputEvent.value = 0;
             emit();
             sync();
-            _isPressed = false;
+            m_isPressed = false;
         }
     }
 
     void Button::emit() {
-        write(_fd, &_inputEvent, sizeof(_inputEvent));
+        write(m_fd, &m_inputEvent, sizeof(m_inputEvent));
     }
 
     void Button::sync() {
-        _inputEvent.type = EV_SYN;
-        _inputEvent.code = SYN_REPORT;
-        _inputEvent.value = 0;
+        m_inputEvent.type = EV_SYN;
+        m_inputEvent.code = SYN_REPORT;
+        m_inputEvent.value = 0;
         emit();
     }
 
     int Button::getKey() const {
-        return _key;
+        return m_key;
     }
 
     void Button::initiate(int fd) {
-        _fd = fd;
-        ioctl(_fd, UI_SET_KEYBIT, _key);
+        m_fd = fd;
+        ioctl(m_fd, UI_SET_KEYBIT, m_key);
     }
 
     Command::Command(std::string &command) : Action(
             std::move(command)),
-            _done(true) {}
+            m_done(true) {}
 
     void Command::activate(int16_t) {
-        if (_done) {
+        if (m_done) {
             std::thread thread(&Command::start, this);
             thread.detach();
         }
@@ -75,22 +75,22 @@ namespace Actions {
     }
 
     void Command::start() {
-        _done = false;
-        system(_command.c_str());
-        _done = true;
+        m_done = false;
+        system(m_command.c_str());
+        m_done = true;
     }
 
 
     Macro::Macro(std::vector<std::shared_ptr<Actions::Action>> actionVector) :
-            _actionVector(std::move(actionVector)), Action("") {
+            m_actionVector(std::move(actionVector)), Action("") {
     }
 
     Macro::~Macro(){
-        _actionVector.clear();
+        m_actionVector.clear();
     }
 
     void Macro::activate(int16_t) {
-        for (auto const &it : _actionVector) {
+        for (auto const &it : m_actionVector) {
             it->activate(1);
             it->deactivate();
         }
@@ -98,36 +98,36 @@ namespace Actions {
 
 
     void Macro::initiate(int fd) {
-        for (auto const &action : _actionVector) {
+        for (auto const &action : m_actionVector) {
             action->initiate(fd);
         }
     }
 
     Mouse::Mouse(int key, int sensibility, bool isPositive) :
             Button(key),
-            _sensibility(sensibility),
-            _isPositive(isPositive) {
+            m_sensibility(sensibility),
+            m_isPositive(isPositive) {
     }
 
     void Mouse::activate(int16_t value) {
-        _value = value;
-        if (!_isPressed) {
-            _isPressed = true;
+        m_value = value;
+        if (!m_isPressed) {
+            m_isPressed = true;
             std::thread mouseThread(&Mouse::start, this);
             mouseThread.detach();
         }
     }
 
     void Mouse::deactivate() {
-        _isPressed = false;
+        m_isPressed = false;
     }
 
     void Mouse::start() {
-        while (_isPressed) {
-            _inputEvent.type = EV_REL;
-            _inputEvent.code = getKey();
-            __s32 x = _sensibility * abs(_value) / 32767;
-            _inputEvent.value = _isPositive ? x : -x;
+        while (m_isPressed) {
+            m_inputEvent.type = EV_REL;
+            m_inputEvent.code = getKey();
+            __s32 x = m_sensibility * abs(m_value) / 32767;
+            m_inputEvent.value = m_isPositive ? x : -x;
             emit();
             sync();
             std::this_thread::sleep_for(std::chrono::milliseconds(20));
@@ -135,8 +135,8 @@ namespace Actions {
     }
 
     void Mouse::initiate(int fd) {
-        _fd = fd;
-        ioctl(_fd, UI_SET_RELBIT, getKey());
+        m_fd = fd;
+        ioctl(m_fd, UI_SET_RELBIT, getKey());
     }
 
 
