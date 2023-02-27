@@ -9,10 +9,11 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <Action.h>
+#include "Controller.h"
 
 class JsonMapper {
  public:
-    static std::unordered_map<std::string, std::shared_ptr<Actions::Action>> createMapping(
+    static Controller::Controller createMapping(
             const std::string &profile, const std::string &configPath);
 
  private:

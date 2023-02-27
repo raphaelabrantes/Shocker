@@ -6,7 +6,6 @@
 #include <linux/uinput.h>
 #include <fcntl.h>
 #include <Exception.h>
-#include <Action.h>
 #include <csignal>
 
 namespace EventManager {
@@ -14,15 +13,15 @@ namespace EventManager {
     EventManager::EventManager(
             Controller::ControllerInputReader &controllerInputReader,
             EventConverter &eventConverter) :
-            _eventConverter(&eventConverter),
-            _controllerInputReader(&controllerInputReader) {
+            m_eventConverter(&eventConverter),
+            m_controllerInputReader(&controllerInputReader) {
     }
 
     void EventManager::start() {
-        running = true;
+        m_running = true;
         auto *event = new js_event;
         do {
-            _controllerInputReader->getEvent(event);
+            m_controllerInputReader->getEvent(event);
 #ifdef DEBUG
             std::cout << "TYPE: " <<
             static_cast<int>(event->type) <<
@@ -36,11 +35,11 @@ namespace EventManager {
             } else {
                 dealWithButtons(event);
             }
-        } while (running);
+        } while (m_running);
     }
 
     void EventManager::dealWithButtons(js_event *event) const {
-        auto action = _eventConverter->convert(event);
+        auto action = m_eventConverter->convert(event);
         if (event->value) {
             action->activate(event->value);
         } else {
@@ -52,9 +51,9 @@ namespace EventManager {
         if (!(event->number == 2 || event->number == 5)) {
             if (event->value == 0) {
                 event->value = -1;
-                auto action1 = _eventConverter->convert(event);
+                auto action1 = m_eventConverter->convert(event);
                 event->value = 4;
-                auto action2 = _eventConverter->convert(event);
+                auto action2 = m_eventConverter->convert(event);
                 action1->deactivate();
                 action2->deactivate();
             } else {
@@ -62,10 +61,9 @@ namespace EventManager {
             }
         }
     }
-
 }  // namespace EventManager
 
-int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Action>>& map,
+int start_env(Controller::Controller &controller,
               uinput_setup &uinputSetup) {
     int fd = open("/dev/uinput",
                   O_WRONLY | O_NONBLOCK);
@@ -77,9 +75,7 @@ int start_env(const std::unordered_map<std::string, std::shared_ptr<Actions::Act
     ioctl(fd, UI_SET_EVBIT, EV_REL);
     ioctl(fd, UI_SET_EVBIT, EV_KEY);
     ioctl(fd, UI_SET_KEYBIT, BTN_LEFT);
-    for (auto &it : map) {
-        it.second->initiate(fd);
-    }
+    controller.initiate(fd);
     memset(&uinputSetup, 0, sizeof(uinputSetup));
     uinputSetup.id.bustype = BUS_USB;
     uinputSetup.id.vendor = 0x1234;

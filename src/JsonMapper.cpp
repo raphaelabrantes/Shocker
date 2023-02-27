@@ -8,7 +8,7 @@
 #include <JsonMapper.h>
 #include <Exception.h>
 
-std::unordered_map<std::string, std::shared_ptr<Actions::Action>> JsonMapper::createMapping(
+Controller::Controller JsonMapper::createMapping(
         const std::string &profile, const std::string &configPath) {
     const nlohmann::json &profileJson = createJsonFromFile(profile);
     const nlohmann::json &keyMaps = createJsonFromFile(
@@ -19,7 +19,7 @@ std::unordered_map<std::string, std::shared_ptr<Actions::Action>> JsonMapper::cr
         auto jsonObj = it->get<nlohmann::json>();
         mapping[it.key()] = std::move(createActions(jsonObj, keyMaps));
     }
-    return mapping;
+    return Controller::Controller(mapping);
 }
 
 

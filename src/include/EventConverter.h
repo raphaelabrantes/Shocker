@@ -9,42 +9,43 @@
 #include <unordered_map>
 #include <Action.h>
 #include <iostream>
+#include "Controller.h"
 
 
 class EventClassifier {
 public:
     EventClassifier(int eventType, int eventNumber, int eventValue = 0) {
-        _eventType = eventType;
-        _eventNumber = eventNumber;
+        m_eventType = eventType;
+        m_eventNumber = eventNumber;
         if (eventValue > 1) {
-            _eventValue = 3;
+            m_eventValue = 3;
         } else if (eventValue < 0) {
-            _eventValue = 4;
-        } else _eventValue = 0;
+            m_eventValue = 4;
+        } else m_eventValue = 0;
     }
 
     ~EventClassifier() = default;
 
     bool operator==(const EventClassifier &other) const {
-        return other.getType() == _eventType && other.getNumber() == _eventNumber && other.getValue() == _eventValue;
+        return other.getType() == m_eventType && other.getNumber() == m_eventNumber && other.getValue() == m_eventValue;
     }
 
     int getType() const {
-        return _eventType;
+        return m_eventType;
     }
 
     int getNumber() const {
-        return _eventNumber;
+        return m_eventNumber;
     }
 
     int getValue() const {
-        return _eventValue;
+        return m_eventValue;
     }
 
 private:
-    int _eventNumber;
-    int _eventType;
-    int _eventValue;
+    int m_eventNumber;
+    int m_eventType;
+    int m_eventValue;
 };
 
 namespace std {
@@ -60,12 +61,12 @@ namespace std {
 
 class EventConverter {
 public:
-    explicit EventConverter(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap);
+    explicit EventConverter(Controller::Controller &controller);
     Actions::Action *convert(js_event *event) const;
-    void setActionKeyBindingMap(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> actionKeyBindindMap);
+    void setController(Controller::Controller &controller);
     void stopAll();
 private:
-    std::unordered_map<std::string, std::shared_ptr<Actions::Action>> _actionKeyBindindMap;
-    std::unordered_map<EventClassifier, std::string> _eventsNameMap;
+    Controller::Controller m_controller;
+    std::unordered_map<EventClassifier, std::string> m_eventsNameMap;
 };
 

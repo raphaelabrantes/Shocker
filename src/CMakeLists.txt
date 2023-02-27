@@ -11,5 +11,5 @@ add_library(Shocker
         EventConverter.cpp
         EventManager.cpp
         JsonMapper.cpp
-        )
+        include/Controller.h )
 target_include_directories(Shocker PUBLIC include)

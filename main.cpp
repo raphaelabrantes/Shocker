@@ -15,10 +15,10 @@ int main(int argc, char *argv[]) {
         profileFile.assign(argv[1]);
     }
     uinput_setup uinputSetup {};
-    auto keybinding = JsonMapper::createMapping(profileFile, configPath);
-    start_env(keybinding, uinputSetup);
+    auto controller = JsonMapper::createMapping(profileFile, configPath);
+    start_env(controller, uinputSetup);
     Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
-    EventConverter eventConverter(std::move(keybinding));
+    EventConverter eventConverter(controller);
     EventManager::EventManager eventManager(controllerInputReader,
                                             eventConverter);
     eventManager.start();
