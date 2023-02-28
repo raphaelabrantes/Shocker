@@ -12,10 +12,6 @@
 #include <EventConverter.h>
 
 
-
-int start_env(Controller::Controller &controller, uinput_setup &setup);
-void stop_env(int fd);
-
 namespace EventManager {
     class EventManager {
      public:

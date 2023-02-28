@@ -13,31 +13,25 @@
 namespace Controller {
     class Controller {
     public:
-        explicit Controller(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> &actions) : m_actions(
-                std::move(std::move(actions))) {};
+        explicit Controller(std::unordered_map<std::string, std::shared_ptr<Actions::Action>> &actions);
 
-        Actions::Action *at(const std::string &key) const{
-            return m_actions.at(key).get();
-        }
+        Actions::Action *at(const std::string &key) const;
 
-        void initiate(int fd) {
-           for (const auto &it : m_actions) {
-                it.second->initiate(fd);
-            }
-        }
-        ~Controller() {
-            stopAll();
-            m_actions.clear();
-        }
+        void initiate(int fd);
 
-        void stopAll() {
-            for (const auto &item: m_actions){
-                item.second->deactivate();
-            }
-        }
+        ~Controller();
+
+        void stopAll();
 
     private:
         std::unordered_map<std::string, std::shared_ptr<Actions::Action>> m_actions;
+        uinput_setup m_uinputSetup {};
+        int m_fd;
+
     };
+
+    int start_env(Controller &controller,
+                  uinput_setup &uinputSetup);
+    void stop_env(int fd);
 
 }
