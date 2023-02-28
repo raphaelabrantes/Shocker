@@ -15,13 +15,15 @@
 
 
 class Window : public QWidget {
- public:
+public:
     explicit Window(EventManager::EventManager *eventManager);
 
- private:
+private:
     void startShocker();
 
     void stopShocker();
+
+    void gracefullyShutdown();
 
     QAction *quitAction;
     QAction *startAction;
@@ -42,9 +44,20 @@ Window::Window(EventManager::EventManager *eventManager) {
 
     connect(startAction, &QAction::triggered, this, &Window::startShocker);
     connect(stopAction, &QAction::triggered, this, &Window::stopShocker);
-    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
-
+    connect(quitAction, &QAction::triggered, this, &Window::gracefullyShutdown);
     trayIcon = new QSystemTrayIcon(this);
+    connect(trayIcon, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason) {
+        switch (reason) {
+            case QSystemTrayIcon::Unknown:
+            case QSystemTrayIcon::Context:
+            case QSystemTrayIcon::DoubleClick:
+            case QSystemTrayIcon::MiddleClick:
+                break;
+            case QSystemTrayIcon::Trigger:
+                trayIconMenu->popup(QCursor::pos());
+
+        }
+    });
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setIcon(icon);
     setWindowIcon(icon);
@@ -69,6 +82,11 @@ void Window::stopShocker() {
     trayIconMenu->addAction(quitAction);
 }
 
+void Window::gracefullyShutdown() {
+    eventManager->stop();
+    qApp->quit();
+}
+
 int main(int argc, char *argv[]) {
     std::string joystickDeviceFile("/dev/input/js0");
     const std::string configPath = getenv("HOME") +
@@ -82,8 +100,6 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     try {
         auto controller = JsonMapper::createMapping(profileFile, configPath);
-        uinput_setup uinputSetup {};
-        start_env(controller, uinputSetup);
         Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
         EventConverter eventConverter(controller);
         EventManager::EventManager eventManager(controllerInputReader,

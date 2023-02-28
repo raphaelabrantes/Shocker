@@ -14,9 +14,8 @@ int main(int argc, char *argv[]) {
     if (argc < 1) {
         profileFile.assign(argv[1]);
     }
-    uinput_setup uinputSetup {};
+
     auto controller = JsonMapper::createMapping(profileFile, configPath);
-    start_env(controller, uinputSetup);
     Controller::ControllerInputReader controllerInputReader(joystickDeviceFile);
     EventConverter eventConverter(controller);
     EventManager::EventManager eventManager(controllerInputReader,
